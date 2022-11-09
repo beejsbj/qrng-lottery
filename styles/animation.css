@@ -8,18 +8,14 @@
 	animation: slide-in-top 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
 }
 .slide-in-left {
-	-webkit-animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
-	        animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
+	-webkit-animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) backwards;
+	        animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) backwards;
 	        animation-delay: 0.2s;
 }
 bid-card.slide-in-left {
-	-webkit-animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
-	        animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
 	        animation-delay: 0.3s;
 }
 rules-card.slide-in-left {
-	-webkit-animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
-	        animation: slide-in-left 0.5s cubic-bezier(.54,-0.75,0,1.64) both;
 	        animation-delay: 0.4s;
 }
 .slide-in-right {
@@ -74,7 +70,7 @@ animation-timing-function: ease-out, ease-in;
 }
 
 @keyframes jolt {
-	0 {
+	0% {
 		transform: translate(-50%, -50%) skew(20deg) scale(0, .1) rotate(-15deg);
 	}
 
@@ -88,7 +84,7 @@ animation-timing-function: ease-out, ease-in;
 }
 
 @keyframes joltalt {
-	0 {
+	0% {
 		transform: translate(-50%, -50%) skew(20deg) scale(.05, .5) rotate(-15deg);
 	}
 
@@ -156,7 +152,7 @@ animation-timing-function: ease-out, ease-in;
 	}
 
 	100% {
-		transform: transform: translate(-50%, -50%) scale(3) rotate(5deg);
+		transform: translate(-50%, -50%) scale(3) rotate(5deg);
 		opacity: 1;
 	}
 }
@@ -211,13 +207,11 @@ animation-timing-function: ease-out, ease-in;
 
 @keyframes slide-in-left {
   0% {
-    -webkit-transform: translateX(-1000px);
-            transform: translateX(-1000px) skew(50deg);
+    transform: translateX(-1000px) skew(50deg);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
-            transform: translateX(0) skew(0);
+    transform: translateX(0) skew(0);
     opacity: 1;
   }
 }
