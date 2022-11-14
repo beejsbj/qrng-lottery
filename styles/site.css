@@ -1,34 +1,34 @@
 /* P reset */
-@import 'preset.css';
+@import "preset.css";
 
 /* S etup */
-@import 'setup.css';
+@import "setup.css";
 
 /* S setings */
-@import 'settings.css';
-@import 'developer-styles.css';
+@import "settings.css";
+@import "developer-styles.css";
 
 /* S tructure */
-@import 'structure.css';
+@import "structure.css";
 
 /* T ypography */
-@import 'typography.css';
+@import "typography.css";
 
 /* C omponents */
-@import 'animation.css';
-@import 'components.css';
-@import 'forms.css';
+@import "animation.css";
+@import "components.css";
+@import "forms.css";
 
 /* S tuff (modules) */
-@import 'modules.css';
+@import "modules.css";
 
 /* S ections and more stuff */
 
 /* then other contextual styles */
 body {
 	background-color: var(--paper);
-/*	background-image: url('https://media.discordapp.net/attachments/549703400791605260/1019094503904247828/unknown.png');*/
-/*	background-image: url('../assets/stars.gif');*/
+	/*	background-image: url('https://media.discordapp.net/attachments/549703400791605260/1019094503904247828/unknown.png');*/
+	/*	background-image: url('../assets/stars.gif');*/
 	background-size: contain;
 	background-position: right center;
 	background-repeat: no-repeat;
@@ -37,10 +37,10 @@ body {
 
 	padding-bottom: 250px;
 }
-@media (max-width:  925px){
+@media (max-width: 925px) {
 	body {
 		background-size: cover;
-	background-position: center center;
+		background-position: center center;
 	}
 }
 .my-fantastic-image {
@@ -48,15 +48,13 @@ body {
 	border-bottom-right-radius: 30px;
 }
 
-
 video {
-
-  object-fit: cover;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -10;
-  mix-blend-mode: multiply;
+	object-fit: cover;
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -10;
+	mix-blend-mode: multiply;
 }
