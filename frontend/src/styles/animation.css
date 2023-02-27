@@ -40,7 +40,7 @@ rules-card.slide-in-left {
   transition-delay: 0.1s !important;
 }
 
-.heartbeat:nth-of-type(odd) {
+.heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite both;
 }
 

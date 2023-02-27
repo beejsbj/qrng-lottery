@@ -10679,6 +10679,7 @@ __metadata:
     flipdown: ^0.3.2
     howler: ^2.2.3
     react: ^18.2.0
+    react-animate-on-change: ^2.2.0
     react-dom: ^18.2.0
     react-router-dom: ^6.8.0
     vite: ^4.0.0
@@ -10801,6 +10802,15 @@ __metadata:
     iconv-lite: 0.4.24
     unpipe: 1.0.0
   checksum: ba1583c8d8a48e8fbb7a873fdbb2df66ea4ff83775421bfe21ee120140949ab048200668c47d9ae3880012f6e217052690628cf679ddfbd82c9fc9358d574676
+  languageName: node
+  linkType: hard
+
+"react-animate-on-change@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "react-animate-on-change@npm:2.2.0"
+  peerDependencies:
+    react: ">15.0.0"
+  checksum: 17f2867b7347f30d7863dc2b5c2feec65a0d31c853826fc14c5816039aa54fa9981ae93e4d11ba3ffacc5860da395187cec8ab99b9f634660d3164a9e5816e76
   languageName: node
   linkType: hard
 

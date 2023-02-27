@@ -408,3 +408,20 @@ lottery-module ul li .dials:checked + label::before {
 	border-radius: 0;
 	z-index: 1;
 }
+
+
+.pot-beat-change {
+  animation: potBeatChange 0.5s cubic-bezier(0.54, -0.75, 0, 1.64);
+}
+
+@keyframes potBeatChange {
+  0% {
+	 transform: scale(1) rotate(0deg);
+  }
+  50% {
+	 transform: scale(2) rotate(5deg);
+  }
+  100% {
+	 transform: scale(1) rotate(0deg);
+  }
+}

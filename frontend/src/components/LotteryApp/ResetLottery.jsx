@@ -5,8 +5,9 @@ export default function ResetLottery() {
   const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
 
   return (
-    <button className={`button ${hasLotteryEnded ? "reset-lottery" : "hide"}`}>
-      Get{nbsp}Lottery{nbsp}Results
-    </button>
+    <div className={`${hasLotteryEnded ? "reset-lottery" : "hide"}`}>
+      <h2 className="attention-voice">Lottery has ended</h2>
+      <button className="button">Reset{nbsp}Lottery</button>
+    </div>
   );
 }
