@@ -4,6 +4,7 @@ import { endTime } from "./endtime";
 import { numbers } from "./numbers";
 import { pot } from "./pot";
 import { ticket } from "./ticket";
+import { winner } from "./winner";
 
 const useStore = create(
   devtools((set, get) => ({
@@ -11,6 +12,7 @@ const useStore = create(
     ticket: ticket(set, get),
     numbers: numbers(set, get),
     endTime: endTime(set, get),
+    winner: winner(set, get),
     errors: [],
     setErrors: (errors) => set({ errors: errors }),
   }))

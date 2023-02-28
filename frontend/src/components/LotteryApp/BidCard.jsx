@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useStore from "../../store";
 import TicketCard from "./TicketCard";
 import AnimateOnChange from "react-animate-on-change";
@@ -6,14 +6,15 @@ import AnimateOnChange from "react-animate-on-change";
 export default function BidCard(props) {
   const amount = useStore((state) => state.pot.amount);
   const readContract = useStore((state) => state.pot.readContract);
+  const [amountClass, setAmountClass] = useState("loud-voice heartbeat");
 
-  let amountClass = "loud-voice heartbeat";
   useEffect(() => {
-    amountClass = "loud-voice pot-beat-change";
+    setAmountClass("loud-voice pot-beat-change");
     setTimeout(() => {
-      amountClass = "loud-voice heartbeat";
+      setAmountClass("loud-voice heartbeat");
     }, 1000);
   }, [amount]);
+
   useEffect(() => {
     readContract();
   }, []);
