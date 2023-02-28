@@ -14,7 +14,7 @@ const useStore = create(
     endTime: endTime(set, get),
     winner: winner(set, get),
 
-    hasLotteryEnded: true,
+    hasLotteryEnded: false,
     setHasLotteryEnded: (hasLotteryEnded) => {
       const currentTime = Math.floor(new Date().getTime() / 1000);
       if (currentTime > get().endTime.value) {
