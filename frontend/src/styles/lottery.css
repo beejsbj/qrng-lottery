@@ -411,7 +411,7 @@ lottery-module ul li .dials:checked + label::before {
 
 
 .pot-beat-change {
-  animation: potBeatChange 0.5s cubic-bezier(0.54, -0.75, 0, 1.64);
+  animation: potBeatChange 1s cubic-bezier(0.54, -0.75, 0, 1.64);
 }
 
 @keyframes potBeatChange {
