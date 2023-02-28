@@ -6,7 +6,9 @@ export default function ResetLottery() {
 
   return (
     <div className={`${hasLotteryEnded ? "reset-lottery" : "hide"}`}>
-      <h2 className="attention-voice">Lottery has ended</h2>
+      <h2 className="attention-voice">
+        Lottery{nbsp}has{nbsp}ended
+      </h2>
       <button className="button">Reset{nbsp}Lottery</button>
     </div>
   );

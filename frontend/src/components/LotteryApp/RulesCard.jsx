@@ -4,7 +4,9 @@ export default function RulesCard() {
   const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
 
   return (
-    <rules-card class="slide-in-left">
+    <rules-card
+      class={`${hasLotteryEnded ? "lottery-ended-rules" : "slide-in-left"}`}
+    >
       <h2 className="loud-voice">Instructions</h2>
       {!hasLotteryEnded && (
         <ol>

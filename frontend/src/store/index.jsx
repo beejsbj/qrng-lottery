@@ -13,6 +13,16 @@ const useStore = create(
     numbers: numbers(set, get),
     endTime: endTime(set, get),
     winner: winner(set, get),
+
+    hasLotteryEnded: true,
+    setHasLotteryEnded: (hasLotteryEnded) => {
+      const currentTime = Math.floor(new Date().getTime() / 1000);
+      if (currentTime > get().endTime.value) {
+        set({ hasLotteryEnded: true });
+      } else {
+        set({ hasLotteryEnded: false });
+      }
+    },
     errors: [],
     setErrors: (errors) => set({ errors: errors }),
   }))

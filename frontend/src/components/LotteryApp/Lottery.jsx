@@ -17,6 +17,7 @@ export default function Lottery(props) {
   const selectedNumbers = useStore((state) => state.numbers.selected);
   const setNumbers = useStore((state) => state.numbers.setNumbers);
   const buyTicket = useStore((state) => state.ticket.writeContract);
+  const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
 
   useEffect(() => {
     setNumbers(dials.filter((dial) => dial.checked).map((dial) => dial.number));
@@ -94,7 +95,8 @@ export default function Lottery(props) {
     resetDials();
 
     const updatedDials = dials.map((dial) => {
-      dial.class = dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse";
+      dial.class =
+        dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse";
       return dial;
     });
 
@@ -117,7 +119,9 @@ export default function Lottery(props) {
   }
 
   return (
-    <lottery-module class={"slide-in-right"}>
+    <lottery-module
+      class={`${hasLotteryEnded ? "lottery-ended" : "slide-in-right"}`}
+    >
       <ResetLottery />
       <form>
         <ul>
@@ -147,7 +151,10 @@ export default function Lottery(props) {
           <button className="roll attention-voice button" onClick={handleRoll}>
             ROLL
           </button>
-          <button className="submit attention-voice button contained" onClick={handleSubmit}>
+          <button
+            className="submit attention-voice button contained"
+            onClick={handleSubmit}
+          >
             SUBMIT
           </button>
         </div>
