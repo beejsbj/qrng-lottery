@@ -4,6 +4,7 @@ import tokenContract from "../contracts/lottery.json";
 
 export const pot = (set, get) => ({
   amount: 0,
+
   readContract: async () => {
     const data = await readContract({
       abi: tokenContract,

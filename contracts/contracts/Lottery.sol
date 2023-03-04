@@ -82,6 +82,7 @@ contract Lottery is RrpRequesterV0, Ownable {
         pendingRequestIds[requestId] = true;
         emit RequestedRandomNumber(requestId);
         sponsorWallet.call{value: msg.value}(""); // Send funds to sponsor wallet
+	
     }
 
     /// @notice Close the current week and calculate the winners. Can be called by anyone after the end time has passed.
