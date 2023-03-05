@@ -7,7 +7,7 @@ export const winner = (set, get) => ({
   getLastWeekWinningNumber: async () => {
     const data = await readContract({
       abi: tokenContract,
-      address: "0x3E1Eb24ef031002E41d173BE2B1c7D04DF67b9d2",
+      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
       functionName: "getLastWeekWinningNumber",
     });
     set((state) => ({

@@ -7,9 +7,7 @@ class FlipDown {
   constructor(uts, el = "flipdown", opt = {}) {
     // If uts is not specified
     if (typeof uts !== "number") {
-      throw new Error(
-        `FlipDown: Constructor expected unix timestamp, got ${typeof uts} instead.`
-      );
+      throw new Error(`FlipDown: Constructor expected unix timestamp, got ${typeof uts} instead.`);
     }
 
     // If opt is specified, but not el
@@ -182,9 +180,7 @@ class FlipDown {
     if (this._hasCountdownEnded()) {
       this.daysremaining = 0;
     } else {
-      this.daysremaining = Math.floor(
-        (this.epoch - this.now) / 86400
-      ).toString().length;
+      this.daysremaining = Math.floor((this.epoch - this.now) / 86400).toString().length;
     }
     var dayRotorCount = this.daysremaining <= 2 ? 2 : this.daysremaining;
 
@@ -212,18 +208,10 @@ class FlipDown {
     }
 
     // Store and convert rotor nodelists to arrays
-    this.rotorLeafFront = Array.prototype.slice.call(
-      this.element.getElementsByClassName("rotor-leaf-front")
-    );
-    this.rotorLeafRear = Array.prototype.slice.call(
-      this.element.getElementsByClassName("rotor-leaf-rear")
-    );
-    this.rotorTop = Array.prototype.slice.call(
-      this.element.getElementsByClassName("rotor-top")
-    );
-    this.rotorBottom = Array.prototype.slice.call(
-      this.element.getElementsByClassName("rotor-bottom")
-    );
+    this.rotorLeafFront = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-leaf-front"));
+    this.rotorLeafRear = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-leaf-rear"));
+    this.rotorTop = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-top"));
+    this.rotorBottom = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-bottom"));
 
     // Set initial values;
     this._tick();
@@ -243,10 +231,7 @@ class FlipDown {
     rotorGroup.className = "rotor-group";
     var dayRotorGroupHeading = document.createElement("div");
     dayRotorGroupHeading.className = "rotor-group-heading";
-    dayRotorGroupHeading.setAttribute(
-      "data-before",
-      this.opts.headings[rotorIndex]
-    );
+    dayRotorGroupHeading.setAttribute("data-before", this.opts.headings[rotorIndex]);
     rotorGroup.appendChild(dayRotorGroupHeading);
     appendChildren(rotorGroup, rotors);
     return rotorGroup;
