@@ -1,7 +1,6 @@
 import LotteryApp from "./components/LotteryApp/LotteryApp";
 import ConnectButton from "./components/LotteryApp/ConnectButton";
 import { useAccount } from "wagmi";
-
 function App() {
   const { isConnected } = useAccount();
 

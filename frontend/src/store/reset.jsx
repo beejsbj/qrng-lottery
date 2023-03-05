@@ -15,7 +15,7 @@ export const reset = (set, get) => ({
       address: "0x3E1Eb24ef031002E41d173BE2B1c7D04DF67b9d2",
       functionName: "getWinningNumber",
       overrides: {
-        value: ethers.utils.parseEther(0.01),
+        value: ethers.utils.parseEther("0.01"),
       },
     });
     const { hash } = await writeContract(config);
