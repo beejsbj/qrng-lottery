@@ -11,7 +11,7 @@ export default function Loading(props) {
   //   });
 
   return (
-    <div className="loading-screen">
+    <div className="loading-screen hide">
       <div className="container">
         <h1 className="booming-voice">WAAIT</h1>
         <div className="pictures">
