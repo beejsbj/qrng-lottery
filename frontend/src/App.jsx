@@ -1,6 +1,8 @@
 import LotteryApp from "./components/LotteryApp/LotteryApp";
 import ConnectButton from "./components/LotteryApp/ConnectButton";
 import { useAccount } from "wagmi";
+import Loading from "./components/LotteryApp/Loading";
+
 function App() {
   const { isConnected } = useAccount();
 
@@ -13,6 +15,7 @@ function App() {
             <h1 className="booming-voice slide-in-top">Lottery</h1>
             {isConnected && <LotteryApp />}
           </inner-column>
+          <Loading />
         </section>
       </main>
       <div className="final-result hide"></div>
