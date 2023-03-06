@@ -22,10 +22,13 @@ body {
   background-repeat: no-repeat;
   background-blend-mode: multiply;
   overflow-x: hidden;
-  padding-bottom: 250px;
   user-select: none;
   cursor: url(../assets/cursor.cur), default;
 
+}
+
+inner-column {
+	padding-top: 40px;
 }
 
 @media (max-width: 925px) {
