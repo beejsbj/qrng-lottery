@@ -1,10 +1,4 @@
-import {
-  prepareWriteContract,
-  writeContract,
-  waitForTransaction,
-  getContract,
-  watchContractEvent,
-} from "@wagmi/core";
+import { prepareWriteContract, writeContract, waitForTransaction, getContract, watchContractEvent } from "@wagmi/core";
 import tokenContract from "../contracts/lottery.json";
 import { ethers } from "ethers";
 
@@ -25,14 +19,12 @@ export const reset = (set, get) => ({
       },
     });
     const { hash } = await writeContract(config);
-    set({ loadingContract: true });
+    set((state) => ({ ...state, reset: { ...state.reset, loadingContract: true } }));
     const data = await waitForTransaction({
       hash,
       confirmations: 1,
     });
-    const log = data.logs.find(
-      (log) => log.address === "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee"
-    );
+    const log = data.logs.find((log) => log.address === "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee");
     const parsedLog = lottery.interface.parseLog(log);
     const logRequestId = parsedLog.args.requestId;
     console.log(logRequestId);
@@ -47,7 +39,7 @@ export const reset = (set, get) => ({
         console.log(requestId, randomNumber);
         if (requestId === logRequestId) unwatch();
         get().endTime.readContract();
-        set({ loadingContract: false });
+        set((state) => ({ ...state, reset: { ...state.reset, loadingContract: false } }));
       }
     );
   },
