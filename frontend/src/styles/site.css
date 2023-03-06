@@ -58,6 +58,13 @@ video {
 }
 
 
+.hide-loading {
+   opacity: 0;
+   visibility: hidden;  
+
+}
+
+
 
 .loading-screen {
 	  position: fixed;
@@ -67,11 +74,9 @@ video {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   transition: all 0.5s ease-in-out;
+
+  
 }
 
 .loading-screen .container {
@@ -87,11 +92,15 @@ video {
 
   display: grid;
   justify-items: center;
+  width: 100%;
 
+}
+.loading-screen h1 {
+  font-size: clamp(1.5rem, 8vw, 6rem);
 }
 
 .loading-screen .container picture {
-	max-width: 80px;
+	max-width: clamp(30px, 8vw, 200px);
 	/* rotate infinetly in steps */
 	animation: loadingRotate 10s infinite;
 	animation-timing-function: steps(36);
