@@ -329,7 +329,7 @@
  
  }
 
- @media(max-height:  1250px) {
+ @media (min-width:  1180px) and (max-height:  1250px) {
 	.flipdown {
 	position: absolute;
 	top: 15px;

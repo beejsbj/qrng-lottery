@@ -54,12 +54,22 @@ rules-card h2 {
 }
 
 bid-card ticket-card,
-bid-card text-content,
-past-card {
+bid-card text-content {
   background-color: var(--shade);
   color: white;
   padding: 20px;
   text-align: center;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  justify-items: center;
+  /* border-radius: 5px; */
+}
+
+past-card {
+  background-color: var(--shade);
+  color: white;
+  padding: 20px;
   display: grid;
   gap: 20px;
   align-content: start;
