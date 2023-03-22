@@ -1,3 +1,2 @@
-# react-lottery
+# Front-end REACT project for API3
 
-#link to live https://react-lottery-api3.netlify.app/
