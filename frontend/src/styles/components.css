@@ -115,6 +115,7 @@
 .connect-wrapper button {
 	background-color: var(--white);
 	color: var(--black);
+	width: 25%;
 }
 
 .wallet-wrapper button:hover,
@@ -216,7 +217,3 @@ button.disabled {
 	text-decoration: line-through;
 }
 
-button.connect.shake {
-	animation: shake-horizontal 0.5s;
-	animation-iteration-count: 5;
-}
