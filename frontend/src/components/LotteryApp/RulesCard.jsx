@@ -5,7 +5,9 @@ export default function RulesCard() {
 
   return (
     <rules-card
-      class={`${hasLotteryEnded ? "lottery-ended-rules" : "slide-in-left"}`}
+      class={`${
+        hasLotteryEnded ? "lottery-ended-rules slide-in-left" : "slide-in-left"
+      }`}
     >
       <h2 className="loud-voice">Instructions</h2>
       {!hasLotteryEnded && (

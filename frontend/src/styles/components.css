@@ -47,6 +47,7 @@
 
 .button.text {
   background-color: transparent;
+  background-color: var(--white);
   color: var(--color);
   padding: 10px;
 }
@@ -88,52 +89,42 @@
 
 /* rainbowkit styling */
 
-.connect-wrapper {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-	transform: translate(-50%, -50%);
-  z-index: 99999;
-}
-
-.connect-wrapper button {
-  color: var(--black);
-  font-family: "expose", "Luckiest Guy", cursive;
-  background-color: var(--white);
-  transform: rotate(-2deg);
-  font-size: clamp(2.3rem, 8vw, 6rem);
-}
-.connect-wrapper button:hover {
-  background-color: hsla(29, 85%, 52%, 1);
-}
 
 
 
-.wallet-wrapper {
+
+
+
+
+.wallet-wrapper, .connect-wrapper {
   background-color: var(--paper);
-
   position: relative;
   display: flex;
   gap: 15px;
   justify-content: center;
+  min-height: 44px;
 }
 
-.wallet-wrapper button {
+.wallet-wrapper button,
+.connect-wrapper button {
   font-family: "Luckiest Guy", cursive;
   color: var(--white);
   font-size: 1rem;
   align-items: flex-end;
 }
+.connect-wrapper button {
+	background-color: var(--white);
+	color: var(--black);
+}
 
-.wallet-wrapper button:hover {
+.wallet-wrapper button:hover,
+.wallet-wrapper button:focus{	
   background-color: var(--black);
 
-  /* background-image: conic-gradient(
-	hsla(231, 20%, 47%, 1) 100deg,
-	hsla(233, 27%, 37%, 1.00) 100deg 180deg,
-	hsla(231, 20%, 47%, 1.00) 180deg 260deg,
-	hsla(227, 22%, 62%, 1) 260deg 360deg
- ); */
+}
+.connect-wrapper button:hover,
+.connect-wrapper button:focus  {
+	filter: invert(1);
 }
 
 .wallet-wrapper picture {
@@ -216,3 +207,16 @@ button.plus:active {
 	transform: translateY(-5px);
 }
 
+
+button.disabled {
+	
+	/* pointer-events: none; */
+	filter: grayscale(70%);
+	/* strike */
+	text-decoration: line-through;
+}
+
+button.connect.shake {
+	animation: shake-horizontal 0.5s;
+	animation-iteration-count: 5;
+}

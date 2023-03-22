@@ -5,6 +5,15 @@ import Loading from "./components/LotteryApp/Loading";
 
 function App() {
   const { isConnected } = useAccount();
+  function shakeConnectButton() {
+    const connectButton = document.querySelector("button.connect");
+    //  scroll to top
+    window.scrollTo(0, 0);
+    connectButton.classList.add("shake");
+    setTimeout(() => {
+      connectButton.classList.remove("shake");
+    }, 1000);
+  }
 
   return (
     <div className="App">
@@ -13,7 +22,12 @@ function App() {
           <ConnectButton />
           <inner-column>
             <h1 className="booming-voice slide-in-top">Lottery</h1>
-            {isConnected && <LotteryApp />}
+            {isConnected && (
+              <LotteryApp shakeConnectButton={shakeConnectButton} />
+            )}
+            {!isConnected && (
+              <LotteryApp shakeConnectButton={shakeConnectButton} />
+            )}
           </inner-column>
           <Loading />
         </section>

@@ -6,7 +6,7 @@ import PastWinners from "./PastWinners";
 
 import { useState, useEffect } from "react";
 
-export default function LotteryApp() {
+export default function LotteryApp(props) {
   const [ticket, setTicket] = useState(1);
 
   const [refresh, setRefresh] = useState(false);
@@ -31,6 +31,7 @@ export default function LotteryApp() {
         setTicket={setTicket}
         setRefresh={setRefresh}
         refresh={refresh}
+        shakeConnectButton={props.shakeConnectButton}
       />
       <BidCard
         ticket={ticket}

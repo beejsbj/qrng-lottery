@@ -2,8 +2,15 @@ import ResetLottery from "./ResetLottery";
 import { useState, useEffect } from "react";
 import { Howl } from "howler";
 import useStore from "../../store";
+import { useAccount } from "wagmi";
 
 export default function Lottery(props) {
+  const { isConnected } = useAccount();
+
+  const [buttonDisabled, setButtonDisabled] = useState(
+    isConnected ? "" : "disabled"
+  );
+
   const max = 5; //total number of dials to check
   let dialsArr = Array.from(Array(50).keys());
   dialsArr = dialsArr.map((dial) => {
@@ -110,6 +117,10 @@ export default function Lottery(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (buttonDisabled === "disabled") {
+      props.shakeConnectButton();
+      return;
+    }
     console.log(selectedNumbers.length);
     if (selectedNumbers.length < max) {
       // alert("Please select atleast 5");
@@ -120,9 +131,14 @@ export default function Lottery(props) {
 
   return (
     <lottery-module
-      class={`${hasLotteryEnded ? "lottery-ended" : "slide-in-right"}`}
+      class={`${
+        hasLotteryEnded ? "lottery-ended slide-in-right" : "slide-in-right"
+      }`}
     >
-      <ResetLottery />
+      <ResetLottery
+        buttonDisabled={buttonDisabled}
+        shakeConnectButton={props.shakeConnectButton}
+      />
       <form>
         <ul>
           {dials.map((dial) => (
@@ -148,11 +164,14 @@ export default function Lottery(props) {
           ))}
         </ul>
         <div className="buttons">
-          <button className="roll attention-voice button" onClick={handleRoll}>
+          <button
+            className={`roll attention-voice button`}
+            onClick={handleRoll}
+          >
             ROLL
           </button>
           <button
-            className="submit attention-voice button contained"
+            className={`submit attention-voice button contained ${buttonDisabled}`}
             onClick={handleSubmit}
           >
             SUBMIT

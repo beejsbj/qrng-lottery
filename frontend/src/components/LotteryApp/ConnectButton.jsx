@@ -1,8 +1,9 @@
 import { ConnectButton as MetamaskButton } from "@rainbow-me/rainbowkit";
-import imgUrl from "../../assets/metamask-bw.png";
+import { useState } from "react";
 
 export default function ConnectButton() {
   const nbsp = "\u00A0";
+
   return (
     <MetamaskButton.Custom>
       {({
@@ -39,7 +40,7 @@ export default function ConnectButton() {
               if (!connected) {
                 return (
                   <button
-                    className="button"
+                    className="button connect"
                     onClick={openConnectModal}
                     type="button"
                   >
