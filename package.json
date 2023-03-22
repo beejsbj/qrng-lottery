@@ -18,6 +18,5 @@
     "deploy": "yarn workspace qrng-lottery-frontend vite build && cp frontend/dist/index.html frontend/dist/200.html && yarn workspace qrng-lottery-frontend surge dist",
     "build-contracts": "yarn workspace qrng-lottery-contracts hardhat compile",
     "deploy-contracts": "yarn workspace qrng-lottery-contracts hardhat deploy --network $NETWORK"
-  },
-  "packageManager": "yarn@3.4.1"
+  }
 }
