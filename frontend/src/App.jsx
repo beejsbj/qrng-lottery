@@ -9,10 +9,10 @@ function App() {
     const connectButton = document.querySelector("button.connect");
     //  scroll to top
     window.scrollTo(0, 0);
-    connectButton.classList.add("wobble-hor-bottom");
+    connectButton.classList.add("wobble-connect");
     setTimeout(() => {
-      connectButton.classList.remove("wobble-hor-bottom");
-    }, 1000);
+      connectButton.classList.remove("wobble-connect");
+    }, 1200);
   }
 
   return (

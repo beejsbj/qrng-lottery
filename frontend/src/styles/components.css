@@ -105,6 +105,10 @@
   min-height: 44px;
 }
 
+.connect-wrapper {
+	--paper: var(--white);
+}
+
 .wallet-wrapper button,
 .connect-wrapper button {
   font-family: "Luckiest Guy", cursive;
@@ -115,7 +119,8 @@
 .connect-wrapper button {
 	background-color: var(--white);
 	color: var(--black);
-	width: 25%;
+	/* width: 100%; */
+
 }
 
 .wallet-wrapper button:hover,
@@ -217,3 +222,9 @@ button.disabled {
 	text-decoration: line-through;
 }
 
+
+button.wobble-connect {
+	animation: wobble-hor-bottom 0.6s both;
+	animation-iteration-count: 2;
+	filter: invert(100%);
+}
