@@ -2,6 +2,7 @@
   "name": "qrng-lottery-contracts",
   "license": "MIT",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "hardhat compile",
     "deploy": "hardhat deploy --network $NETWORK",
