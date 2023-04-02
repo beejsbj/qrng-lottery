@@ -52,6 +52,7 @@ export const reset = (set, get) => ({
       hash,
       confirmations: 1,
     });
+
     const log = data.logs.find(
       (log) => log.address === "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee"
     );

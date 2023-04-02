@@ -6,7 +6,7 @@
 
 .slide-in-top {
   animation: slide-in-top 0.5s cubic-bezier(0.54, -0.75, 0, 1.64) both;
-}
+ }
 .slide-in-top-bar {
 	animation: slide-in-top-bar 0.5s cubic-bezier(0.54, -0.75, 0, 1.64) both;
  }
