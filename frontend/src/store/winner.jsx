@@ -7,9 +7,10 @@ export const winner = (set, get) => ({
   LastNweeksWinningPot: [],
 
   getLastNWeeksWinningNumber: async () => {
+    const { contractAddress } = get();
     const data = await readContract({
       abi: tokenContract,
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       functionName: "getLastNWeeksWinningNumber",
       args: [3],
     });
@@ -25,9 +26,10 @@ export const winner = (set, get) => ({
   },
 
   getLastNWeeksWinningPot: async () => {
+    const { contractAddress } = get();
     const data = await readContract({
       abi: tokenContract,
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       functionName: "getLastNWeeksWinningPot",
       args: [3],
     });

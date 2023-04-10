@@ -10,6 +10,8 @@ import { reset } from "./reset";
 
 const useStore = create(
   devtools((set, get) => ({
+    contractAddress: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+
     pot: pot(set, get),
     ticket: ticket(set, get),
     numbers: numbers(set, get),

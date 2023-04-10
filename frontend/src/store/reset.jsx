@@ -15,13 +15,15 @@ export const reset = (set, get) => ({
   },
 
   writeContract: async () => {
+    const { contractAddress } = get();
+
     const lottery = await getContract({
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       abi: tokenContract,
     });
     const config = await prepareWriteContract({
       abi: tokenContract,
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       functionName: "getWinningNumber",
       overrides: {
         value: ethers.utils.parseEther("0.01"),
@@ -53,12 +55,9 @@ export const reset = (set, get) => ({
       confirmations: 1,
     });
 
-    const log = data.logs.find(
-      (log) => log.address === "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee"
-    );
+    const log = data.logs.find((log) => log.address === contractAddress);
     const parsedLog = lottery.interface.parseLog(log);
     const logRequestId = parsedLog.args.requestId;
-    console.log(logRequestId);
     console.log("waiting for random number to be generated...");
 
     set((state) => ({
@@ -71,12 +70,11 @@ export const reset = (set, get) => ({
 
     const unwatch = watchContractEvent(
       {
-        address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+        address: contractAddress,
         abi: tokenContract,
         eventName: "ReceivedRandomNumber",
       },
       (requestId, randomNumber) => {
-        console.log(requestId, randomNumber);
         if (requestId === logRequestId) unwatch();
         get().endTime.readContract();
 

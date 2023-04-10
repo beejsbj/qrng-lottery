@@ -17,10 +17,11 @@ export const ticket = (set, get) => ({
   writeContract: async () => {
     const { amount } = get().ticket;
     const { selected } = get().numbers;
+    const { contractAddress } = get();
 
     const config = await prepareWriteContract({
       abi: tokenContract,
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       functionName: "enter",
       args: [selected, amount],
       overrides: {

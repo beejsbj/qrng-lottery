@@ -6,9 +6,10 @@ export const pot = (set, get) => ({
   amount: 0,
 
   readContract: async () => {
+    const { contractAddress } = get();
     const data = await readContract({
       abi: tokenContract,
-      address: "0x690B73FD0A7f922802C4E79f2465fd86C78b2Eee",
+      address: contractAddress,
       functionName: "pot",
     });
     const potWei = BigNumber.from(data);
