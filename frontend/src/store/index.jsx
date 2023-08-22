@@ -20,14 +20,17 @@ const useStore = create(
     reset: reset(set, get),
 
     hasLotteryEnded: false,
-    setHasLotteryEnded: (hasLotteryEnded) => {
+
+    setHasLotteryEnded: () => {
       const currentTime = Math.floor(new Date().getTime() / 1000);
-      if (currentTime > get().endTime.value) {
+      console.log(currentTime, get().endTime.value);
+      if (currentTime >= get().endTime.value) {
         set({ hasLotteryEnded: true });
       } else {
         set({ hasLotteryEnded: false });
       }
     },
+
     errors: [],
     setErrors: (errors) => set({ errors: errors }),
   }))

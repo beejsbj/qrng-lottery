@@ -17,18 +17,8 @@ export const reset = (set, get) => ({
   writeContract: async () => {
     const { contractAddress } = get();
 
-    const lottery = await getContract({
-      address: contractAddress,
-      abi: tokenContract,
-    });
-    const config = await prepareWriteContract({
-      abi: tokenContract,
-      address: contractAddress,
-      functionName: "getWinningNumber",
-      overrides: {
-        value: ethers.utils.parseEther("0.01"),
-      },
-    });
+    await new Promise((r) => setTimeout(r, 500));
+
     set((state) => ({
       ...state,
       reset: {
@@ -37,8 +27,7 @@ export const reset = (set, get) => ({
       },
     }));
 
-    const { hash } = await writeContract(config);
-
+    await new Promise((r) => setTimeout(r, 3000));
     set((state) => ({
       ...state,
       reset: {
@@ -50,14 +39,11 @@ export const reset = (set, get) => ({
       },
     }));
 
-    const data = await waitForTransaction({
-      hash,
-      confirmations: 1,
-    });
+    await new Promise((r) => setTimeout(r, 3000));
 
-    const log = data.logs.find((log) => log.address === contractAddress);
-    const parsedLog = lottery.interface.parseLog(log);
-    const logRequestId = parsedLog.args.requestId;
+    //  const log = data.logs.find((log) => log.address === contractAddress);
+    //  const parsedLog = lottery.interface.parseLog(log);
+    //  const logRequestId = parsedLog.args.requestId;
     console.log("waiting for random number to be generated...");
 
     set((state) => ({
@@ -68,24 +54,27 @@ export const reset = (set, get) => ({
       },
     }));
 
-    const unwatch = watchContractEvent(
-      {
-        address: contractAddress,
-        abi: tokenContract,
-        eventName: "ReceivedRandomNumber",
-      },
-      (requestId, randomNumber) => {
-        if (requestId === logRequestId) unwatch();
-        get().endTime.readContract();
+    await new Promise((r) => setTimeout(r, 3000));
 
-        set((state) => ({
-          ...state,
-          reset: {
-            ...state.reset,
-            loadingContract: { status: false, message: "Completed!" },
-          },
-        }));
-      }
-    );
+    set((state) => ({
+      ...state,
+      reset: {
+        ...state.reset,
+        loadingContract: {
+          status: true,
+          message: "Restting Lottery",
+        },
+      },
+    }));
+
+    get().endTime.readContract();
+
+    set((state) => ({
+      ...state,
+      reset: {
+        ...state.reset,
+        loadingContract: { status: false, message: "Completed!" },
+      },
+    }));
   },
 });

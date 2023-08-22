@@ -10,6 +10,7 @@ import { Decimal } from "decimal.js";
 
 export const ticket = (set, get) => ({
   amount: 1,
+
   setAmount: (amount) =>
     set((state) => ({ ...state, ticket: { ...state.ticket, amount } })),
   loadingContract: { status: false, message: "" },
@@ -19,16 +20,6 @@ export const ticket = (set, get) => ({
     const { selected } = get().numbers;
     const { contractAddress } = get();
 
-    const config = await prepareWriteContract({
-      abi: tokenContract,
-      address: contractAddress,
-      functionName: "enter",
-      args: [selected, amount],
-      overrides: {
-        value: ethers.utils.parseEther(Decimal(0.001).times(amount) + ""),
-      },
-    });
-
     set((state) => ({
       ...state,
       ticket: {
@@ -37,7 +28,7 @@ export const ticket = (set, get) => ({
       },
     }));
 
-    const { hash } = await writeContract(config);
+    await new Promise((r) => setTimeout(r, 3000));
 
     set((state) => ({
       ...state,
@@ -50,12 +41,58 @@ export const ticket = (set, get) => ({
       },
     }));
 
-    const { data } = await waitForTransaction({
-      hash,
-      confirmations: 1,
-    });
+    await new Promise((r) => setTimeout(r, 3000));
 
-    AirnodeRrpV0;
+    set((state) => ({
+      ...state,
+      ticket: {
+        ...state.ticket,
+        loadingContract: {
+          status: true,
+          message: `You have ${amount} tickets}`,
+        },
+      },
+    }));
+
+    await new Promise((r) => setTimeout(r, 3000));
+
+    set((state) => ({
+      ...state,
+      ticket: {
+        ...state.ticket,
+        loadingContract: {
+          status: true,
+          message: `You have selected ${selected} numbers`,
+        },
+      },
+    }));
+
+    await new Promise((r) => setTimeout(r, 3000));
+
+    set((state) => ({
+      ...state,
+      ticket: {
+        ...state.ticket,
+        loadingContract: {
+          status: true,
+          message: "Waiting for Confirmaiton",
+        },
+      },
+    }));
+
+    await new Promise((r) => setTimeout(r, 2000));
+
+    set((state) => ({
+      ...state,
+      ticket: {
+        ...state.ticket,
+        loadingContract: {
+          status: true,
+          message: "Completed!",
+        },
+      },
+    }));
+    await new Promise((r) => setTimeout(r, 500));
 
     set((state) => ({
       ...state,
@@ -67,6 +104,7 @@ export const ticket = (set, get) => ({
         },
       },
     }));
-    get().pot.readContract();
+
+    get().pot.addToAmount(amount);
   },
 });

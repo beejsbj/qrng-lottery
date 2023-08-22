@@ -7,39 +7,54 @@ export const winner = (set, get) => ({
   LastNweeksWinningPot: [],
 
   getLastNWeeksWinningNumber: async () => {
-    const { contractAddress } = get();
-    const data = await readContract({
-      abi: tokenContract,
-      address: contractAddress,
-      functionName: "getLastNWeeksWinningNumber",
-      args: [3],
-    });
+    //  const { contractAddress } = get();
+    //  const data = await readContract({
+    //    abi: tokenContract,
+    //    address: contractAddress,
+    //    functionName: "getLastNWeeksWinningNumber",
+    //    args: [3],
+    //  });
+
+    //  generate an array of random numbers from 1-50
+    const data = [
+      Math.floor(Math.random() * 50) + 1,
+      Math.floor(Math.random() * 50) + 1,
+      Math.floor(Math.random() * 50) + 1,
+    ];
+    console.log(data);
+
     set((state) => ({
       ...state,
       winner: {
         ...state.winner,
-        LastNWeeksWinningNumber: data.map((number) =>
-          BigNumber.from(number).toString()
-        ),
+        LastNWeeksWinningNumber: data.map((number) => number),
       },
     }));
   },
 
   getLastNWeeksWinningPot: async () => {
-    const { contractAddress } = get();
-    const data = await readContract({
-      abi: tokenContract,
-      address: contractAddress,
-      functionName: "getLastNWeeksWinningPot",
-      args: [3],
-    });
+    //  const { contractAddress } = get();
+    //  const data = await readContract({
+    //    abi: tokenContract,
+    //    address: contractAddress,
+    //    functionName: "getLastNWeeksWinningPot",
+    //    args: [3],
+    //  });
+
+    //  generate an array of random numbers upto 1000
+
+    const data = [
+      Math.floor(Math.random() * 1000) + 1,
+      Math.floor(Math.random() * 1000) + 1,
+      Math.floor(Math.random() * 1000) + 1,
+    ];
+    console.log(data);
+
     set((state) => ({
       ...state,
       winner: {
         ...state.winner,
-        LastNweeksWinningPot: data.map((number) =>
-          ethers.utils.formatEther(BigNumber.from(number))
-        ),
+        LastNweeksWinningPot: data.map((number) => number),
       },
     }));
   },

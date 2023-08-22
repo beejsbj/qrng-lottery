@@ -1,5 +1,3 @@
-
-
 @import "flipdown.css";
 
 /* buttons and icons and smaller reusable bits here */
@@ -52,8 +50,6 @@
   padding: 10px;
 }
 
-
-
 .button::after {
   content: "";
   position: absolute;
@@ -86,17 +82,10 @@
   background-color: yellow;
 }
 
-
 /* rainbowkit styling */
 
-
-
-
-
-
-
-
-.wallet-wrapper, .connect-wrapper {
+.wallet-wrapper,
+.connect-wrapper {
   background-color: var(--paper);
   position: relative;
   display: flex;
@@ -106,7 +95,7 @@
 }
 
 .connect-wrapper {
-	--paper: var(--white);
+  /* --paper: var(--white); */
 }
 
 .wallet-wrapper button,
@@ -117,20 +106,18 @@
   align-items: flex-end;
 }
 .connect-wrapper button {
-	background-color: var(--white);
-	color: var(--black);
-	/* width: 100%; */
-
+  background-color: var(--white);
+  color: var(--black);
+  /* width: 100%; */
 }
 
 .wallet-wrapper button:hover,
-.wallet-wrapper button:focus{	
+.wallet-wrapper button:focus {
   background-color: var(--black);
-
 }
 .connect-wrapper button:hover,
-.connect-wrapper button:focus  {
-	filter: invert(1);
+.connect-wrapper button:focus {
+  filter: invert(1);
 }
 
 .wallet-wrapper picture {
@@ -140,91 +127,79 @@
 }
 
 .wallet-wrapper .balance {
-  color: hsla(29, 85%, 52%, 1)
+  color: hsla(29, 85%, 52%, 1);
 }
-
-
-
 
 /* active button */
 .button {
-	/* overflow: hidden; */
+  /* overflow: hidden; */
 }
 .button:before {
-	content: "";
-	position: absolute;
-	aspect-ratio: 1;
-	height: 0;
-	width: auto;
+  content: "";
+  position: absolute;
+  aspect-ratio: 1;
+  height: 0;
+  width: auto;
 
-	top: 50%;
-	left: 50%;
-	top: calc(var(--mouse-y) * 1px);
-	left: calc(var(--mouse-x) * 1px);
-	/* transform-style: flat; */
-	transform: 
-	translate(-50%, -50%)
-		rotate(
-			calc(
-				var(--mouse-y) * var(--mouse-x) * 2deg
-				)
-			);
-	background: url("../assets/stars.svg");
-	z-index: 100;
+  top: 50%;
+  left: 50%;
+  top: calc(var(--mouse-y) * 1px);
+  left: calc(var(--mouse-x) * 1px);
+  /* transform-style: flat; */
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--mouse-y) * var(--mouse-x) * 2deg));
+  background: url("../assets/stars.svg");
+  z-index: 100;
 }
 
-
 .button:active::before {
-	transition: transform .2s ease, width .2s ease, height .2s ease;
+  transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
 
-	  height: 200%;
- }
+  height: 200%;
+}
 
-
-
-button.plus, 
+button.plus,
 button.minus {
-	font-size: 2rem;
-	background: var(--ink);
-	align-items: center;
-	transition: 0.1s ease-out;
-
+  font-size: 2rem;
+  background: var(--ink);
+  align-items: center;
+  transition: 0.1s ease-out;
 }
 
 button.plus {
-	filter: invert(100%);
+  filter: invert(100%);
 }
 
-button.plus:hover{
-	filter: none;
-	transform: translateY(5px);
-
+button.plus:hover {
+  filter: none;
+  transform: translateY(5px);
 }
 button.minus:hover {
-	filter: invert(100%);
-	transform: translateY(-5px);
-
+  filter: invert(100%);
+  transform: translateY(-5px);
 }
 
 button.minus:active {
-	transform: translateY(5px);
+  transform: translateY(5px);
 }
 button.plus:active {
-	transform: translateY(-5px);
+  transform: translateY(-5px);
 }
-
 
 button.disabled {
-	
-	/* pointer-events: none; */
-	filter: grayscale(70%);
-	/* strike */
-	text-decoration: line-through;
+  /* pointer-events: none; */
+  filter: grayscale(70%);
+  /* strike */
+  text-decoration: line-through;
 }
 
-
 button.wobble-connect {
-	animation: wobble-hor-bottom 0.6s both;
-	animation-iteration-count: 2;
-	filter: invert(100%);
+  animation: wobble-hor-bottom 0.6s both;
+  animation-iteration-count: 2;
+  filter: invert(100%);
+}
+
+li a {
+  color: var(--color);
+  display: inline;
 }

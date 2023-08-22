@@ -9,10 +9,15 @@ export default function Flipdown(props) {
   const setHasLotteryEnded = useStore((state) => state.setHasLotteryEnded);
 
   useEffect(() => {
+    console.log(endTime);
+    setHasLotteryEnded();
     if (!endTime) return;
     var flipdown = new FlipDown(ethers.BigNumber.from(endTime).toNumber());
     flipdown.start();
-    setHasLotteryEnded();
+    flipdown.ifEnded(() => {
+      console.log("The countdown has ended!");
+      setHasLotteryEnded();
+    });
   }, [endTime]);
 
   useEffect(() => {

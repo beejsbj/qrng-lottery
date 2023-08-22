@@ -7,9 +7,7 @@ import { useAccount } from "wagmi";
 export default function Lottery(props) {
   const { isConnected } = useAccount();
 
-  const [buttonDisabled, setButtonDisabled] = useState(
-    isConnected ? "" : "disabled"
-  );
+  const [buttonDisabled, setButtonDisabled] = useState(isConnected ? "" : "");
 
   const max = 5; //total number of dials to check
   let dialsArr = Array.from(Array(50).keys());
