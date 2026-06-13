@@ -15,17 +15,15 @@ export default function RulesCard() {
           <li> Welcome to QRNG Lottery </li>
           <li> Numbers are randomized for this showcase </li>
           <li> Select or roll numbers, then submit </li>
-          <li> Connect Metamask to follow the wallet flow </li>
+          <li> Connect the demo wallet to follow the contract flow </li>
         </ol>
       )}
       {hasLotteryEnded && (
         <ol>
           <li> The lottery has Ended!!! </li>
-          <li> Click the button to get the results...(If it wasa real 😉) </li>
+          <li> Draw a QRNG winner and print the receipt </li>
           <li>
-            {" "}
-            Dont forget to check your wallets to check if you won~ (If it was
-            real 😉){" "}
+            The winning number is written into the local contract history
           </li>
           <li>
             <a href="https://github.com/beejsbj/qrng-lottery">

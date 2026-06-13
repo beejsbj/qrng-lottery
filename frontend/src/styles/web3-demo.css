@@ -1,0 +1,277 @@
+transaction-rail {
+  background: var(--shade);
+  color: white;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  position: relative;
+  box-shadow: -5px -5px black;
+  transform: rotate(1deg);
+}
+
+transaction-rail header {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+transaction-rail h2 {
+  background: black;
+  display: inline-block;
+  padding: 5px;
+  transform: rotate(-1deg);
+}
+
+transaction-rail dl,
+.demo-wallet-panel dl {
+  display: grid;
+  gap: 8px;
+}
+
+transaction-rail dl div,
+.demo-wallet-panel dl div {
+  align-items: baseline;
+  border-bottom: 2px dotted rgba(255, 255, 255, 0.28);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(92px, 0.45fr) 1fr;
+  padding-bottom: 6px;
+}
+
+transaction-rail dt,
+.demo-wallet-panel dt {
+  color: yellow;
+  font-family: "Luckiest Guy", cursive;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+transaction-rail dd,
+.demo-wallet-panel dd {
+  font-family: monospace;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.web3-notice {
+  align-items: center;
+  background: white;
+  color: black;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 10px;
+  transform: rotate(-1deg);
+}
+
+.web3-notice p,
+.empty-receipt p {
+  font-size: 1rem;
+}
+
+.web3-notice button,
+.wallet-close {
+  background: black;
+  color: white;
+  cursor: url(../assets/pointer.cur), pointer;
+  font-family: "Luckiest Guy", cursive;
+  padding: 4px 8px;
+}
+
+.empty-receipt {
+  border: 2px dashed rgba(255, 255, 255, 0.45);
+  padding: 14px;
+}
+
+.receipt-card {
+  background: white;
+  color: black;
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  position: relative;
+}
+
+.receipt-card::before,
+.receipt-card::after {
+  background-image: url("../assets/stars.svg");
+  background-size: contain;
+  content: "";
+  height: 42px;
+  opacity: 0.12;
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  transform: rotate(12deg);
+  width: 42px;
+}
+
+.receipt-card::after {
+  bottom: 12px;
+  left: 12px;
+  right: auto;
+  top: auto;
+  transform: rotate(-18deg);
+}
+
+.receipt-stamp {
+  align-self: start;
+  background: var(--color);
+  color: white;
+  display: inline-block;
+  font-family: "expose", "Luckiest Guy", cursive;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  justify-self: start;
+  padding: 2px 10px;
+  transform: rotate(-4deg);
+}
+
+.receipt-card.confirmed .receipt-stamp,
+.receipt-card.receiptReady .receipt-stamp {
+  background: black;
+  color: yellow;
+}
+
+.receipt-card.rejected .receipt-stamp {
+  background: black;
+  color: white;
+  text-decoration: line-through;
+}
+
+.timeline {
+  border-left: 4px solid black;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding-left: 12px;
+}
+
+.timeline li {
+  font-size: 0.92rem;
+  max-width: none;
+  position: relative;
+}
+
+.timeline li::before {
+  background: var(--color);
+  content: "";
+  height: 10px;
+  left: -19px;
+  position: absolute;
+  top: 0.45em;
+  transform: rotate(10deg);
+  width: 10px;
+}
+
+.receipt-history {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.receipt-history li {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  font-family: monospace;
+  font-size: 0.82rem;
+  gap: 10px;
+  justify-content: space-between;
+  max-width: none;
+  padding: 8px;
+}
+
+.demo-wallet-backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  inset: 0;
+  position: fixed;
+  z-index: 120;
+}
+
+.demo-wallet-panel {
+  background: black;
+  border: 4px solid white;
+  box-shadow: -8px 8px 0 var(--shade);
+  color: white;
+  display: grid;
+  gap: 18px;
+  max-width: min(520px, calc(100vw - 28px));
+  padding: 18px;
+  position: fixed;
+  right: clamp(14px, 4vw, 48px);
+  top: 58px;
+  transform: rotate(-1deg);
+  width: 520px;
+}
+
+.demo-wallet-panel header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.demo-wallet-panel h2 {
+  color: white;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 0.9;
+}
+
+.wallet-connect-body,
+.wallet-transaction-body {
+  display: grid;
+  gap: 18px;
+}
+
+.wallet-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.wallet-actions .button {
+  font-size: clamp(1.25rem, 4vw, 2rem);
+}
+
+.wallet-actions .button:disabled {
+  filter: grayscale(1);
+  opacity: 0.75;
+}
+
+@media (min-width: 600px) and (max-width: 925px) {
+  transaction-rail {
+    grid-column: 1 / -1;
+    transform: rotate(0deg);
+  }
+}
+
+@media (min-width: 925px) {
+  transaction-rail {
+    grid-column: 6 / 13;
+    grid-row: 5 / 6;
+  }
+}
+
+@media (max-width: 599px) {
+  transaction-rail {
+    transform: none;
+  }
+
+  transaction-rail dl div,
+  .demo-wallet-panel dl div {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-wallet-panel {
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    top: auto;
+    transform: rotate(0deg);
+    width: auto;
+  }
+
+  .wallet-actions {
+    grid-template-columns: 1fr;
+  }
+}

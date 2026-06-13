@@ -1,6 +1,5 @@
 // import "./flipdown.css";
 import { useEffect } from "react";
-import { BigNumber, ethers } from "ethers";
 import useStore from "../../store";
 
 export default function Flipdown(props) {
@@ -12,7 +11,7 @@ export default function Flipdown(props) {
     console.log(endTime);
     setHasLotteryEnded();
     if (!endTime) return;
-    var flipdown = new FlipDown(ethers.BigNumber.from(endTime).toNumber());
+    var flipdown = new FlipDown(Number(endTime));
     flipdown.start();
     flipdown.ifEnded(() => {
       console.log("The countdown has ended!");

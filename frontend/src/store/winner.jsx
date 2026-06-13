@@ -1,7 +1,3 @@
-import { readContract, writeContract } from "@wagmi/core";
-import { BigNumber, ethers } from "ethers";
-import tokenContract from "../contracts/lottery.json";
-
 export const winner = (set, get) => ({
   LastNWeeksWinningNumber: [],
   LastNweeksWinningPot: [],

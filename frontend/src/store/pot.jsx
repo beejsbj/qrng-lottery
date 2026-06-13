@@ -1,7 +1,3 @@
-import { readContract } from "@wagmi/core";
-import { BigNumber, ethers } from "ethers";
-import tokenContract from "../contracts/lottery.json";
-
 export const pot = (set, get) => ({
   amount: 0,
 
@@ -11,7 +7,7 @@ export const pot = (set, get) => ({
   addToAmount: (toAdd) =>
     set((state) => ({
       ...state,
-      pot: { ...state.pot, amount: state.pot.amount + toAdd },
+      pot: { ...state.pot, amount: Number(state.pot.amount || 0) + toAdd },
     })),
 
   readContract: async () => {
@@ -23,7 +19,7 @@ export const pot = (set, get) => ({
     //    functionName: "pot",
     //  });
 
-    const data = (Math.random() * 1000).toFixed(0);
+    const data = Number((Math.random() * 1000).toFixed(0));
 
     await new Promise((r) => setTimeout(r, 200));
 

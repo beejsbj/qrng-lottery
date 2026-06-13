@@ -13,16 +13,24 @@ export default function LotteryApp(props) {
 
   useEffect(() => {
     const $buttons = document.querySelectorAll("button");
-    $buttons.forEach(($button) => {
-      $button.addEventListener("click", function (event) {
-        let mouseX = event.offsetX;
-        let mouseY = event.offsetY;
+    const handleClick = (event) => {
+      let mouseX = event.offsetX;
+      let mouseY = event.offsetY;
 
-        event.target.style.setProperty("--mouse-y", mouseY);
-        event.target.style.setProperty("--mouse-x", mouseX);
-      });
+      event.target.style.setProperty("--mouse-y", mouseY);
+      event.target.style.setProperty("--mouse-x", mouseX);
+    };
+
+    $buttons.forEach(($button) => {
+      $button.addEventListener("click", handleClick);
     });
-  });
+
+    return () => {
+      $buttons.forEach(($button) => {
+        $button.removeEventListener("click", handleClick);
+      });
+    };
+  }, []);
 
   return (
     <>

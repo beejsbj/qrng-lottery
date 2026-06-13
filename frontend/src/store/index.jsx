@@ -7,6 +7,7 @@ import { pot } from "./pot";
 import { ticket } from "./ticket";
 import { winner } from "./winner";
 import { reset } from "./reset";
+import { web3Demo } from "./web3Demo";
 
 const useStore = create(
   devtools((set, get) => ({
@@ -18,6 +19,7 @@ const useStore = create(
     endTime: endTime(set, get),
     winner: winner(set, get),
     reset: reset(set, get),
+    web3Demo: web3Demo(set, get),
 
     hasLotteryEnded: false,
 

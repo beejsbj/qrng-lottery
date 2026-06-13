@@ -2,13 +2,8 @@ import ResetLottery from "./ResetLottery";
 import { useState, useEffect } from "react";
 import { Howl } from "howler";
 import useStore from "../../store";
-import { useAccount } from "wagmi";
 
 export default function Lottery(props) {
-  const { isConnected } = useAccount();
-
-  const [buttonDisabled, setButtonDisabled] = useState(isConnected ? "" : "");
-
   const max = 5; //total number of dials to check
   let dialsArr = Array.from(Array(50).keys());
   dialsArr = dialsArr.map((dial) => {
@@ -21,7 +16,7 @@ export default function Lottery(props) {
   const [dials, setDials] = useState(dialsArr);
   const selectedNumbers = useStore((state) => state.numbers.selected);
   const setNumbers = useStore((state) => state.numbers.setNumbers);
-  const buyTicket = useStore((state) => state.ticket.writeContract);
+  const buyTicket = useStore((state) => state.web3Demo.startTicketPurchase);
   const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
 
   useEffect(() => {
@@ -115,16 +110,11 @@ export default function Lottery(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (buttonDisabled === "disabled") {
-      props.shakeConnectButton();
+    if (selectedNumbers.length < max) {
+      buyTicket();
       return;
     }
-    console.log(selectedNumbers.length);
-    if (selectedNumbers.length < max) {
-      // alert("Please select atleast 5");
-      // return;
-    }
-    await buyTicket();
+    buyTicket();
   }
 
   return (
@@ -133,10 +123,7 @@ export default function Lottery(props) {
         hasLotteryEnded ? "lottery-ended slide-in-right" : "slide-in-right"
       }`}
     >
-      <ResetLottery
-        buttonDisabled={buttonDisabled}
-        shakeConnectButton={props.shakeConnectButton}
-      />
+      <ResetLottery shakeConnectButton={props.shakeConnectButton} />
       <form>
         <ul>
           {dials.map((dial) => (
@@ -169,7 +156,7 @@ export default function Lottery(props) {
             ROLL
           </button>
           <button
-            className={`submit attention-voice button contained ${buttonDisabled}`}
+            className="submit attention-voice button contained"
             onClick={handleSubmit}
           >
             SUBMIT
