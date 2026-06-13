@@ -1,8 +1,23 @@
-# qrng-lottery
+# QRNG Lottery
 
+QRNG Lottery is the API3 QRNG lottery project: a lottery interface that began as
+a static prototype, moved into React and Web3, and now runs as a demoable
+showcase of the original QRNG flow.
 
-A Repository to demonstrate an on-chain lottery using QRNG, includes a frontend
+The current app keeps the wallet-style interaction and lottery state flow
+without depending on the original live contract infrastructure.
 
+## Development
 
-https://qrng-lottery.netlify.app/
+```sh
+yarn install
+yarn dev
+```
 
+## Build
+
+```sh
+yarn build
+```
+
+The frontend build output is `frontend/dist`.

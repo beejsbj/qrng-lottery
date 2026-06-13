@@ -14,9 +14,10 @@
     "dev": "yarn workspace qrng-lottery-frontend vite",
     "host": "yarn workspace qrng-lottery-frontend vite --host",
     "build": "yarn workspace qrng-lottery-frontend vite build",
-    "preview": "yarn workspace qrng-lottery-frontend vite build && vite preview",
-    "deploy": "yarn workspace qrng-lottery-frontend vite build && cp frontend/dist/index.html frontend/dist/200.html && yarn workspace qrng-lottery-frontend surge dist",
+    "preview": "yarn workspace qrng-lottery-frontend vite build && yarn workspace qrng-lottery-frontend vite preview",
+    "deploy": "vercel --prod",
     "build-contracts": "yarn workspace qrng-lottery-contracts hardhat compile",
     "deploy-contracts": "yarn workspace qrng-lottery-contracts hardhat deploy --network $NETWORK"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

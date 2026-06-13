@@ -12,15 +12,10 @@ export default function RulesCard() {
       <h2 className="loud-voice">Instructions</h2>
       {!hasLotteryEnded && (
         <ol>
-          <li> Welcome to Demo site </li>
-          <li>numbers are randomized, no real money</li>
-          <li> Select/Roll and Sumbit </li>
-          <li>Get Metamask to connect wallet</li>
-          <li>
-            <a href="https://qrng-lottery.netlify.com">
-              link to the live site Live
-            </a>
-          </li>
+          <li> Welcome to QRNG Lottery </li>
+          <li> Numbers are randomized for this showcase </li>
+          <li> Select or roll numbers, then submit </li>
+          <li> Connect Metamask to follow the wallet flow </li>
         </ol>
       )}
       {hasLotteryEnded && (
@@ -34,7 +29,7 @@ export default function RulesCard() {
           </li>
           <li>
             <a href="https://github.com/beejsbj/qrng-lottery">
-              link to the github repo
+              GitHub repository
             </a>
           </li>
         </ol>

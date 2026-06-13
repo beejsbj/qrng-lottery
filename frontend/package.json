@@ -8,7 +8,7 @@
     "host": "vite --host",
     "build": "vite build",
     "preview": "vite build && vite preview",
-    "deploy": "vite build && cp dist/index.html dist/200.html && surge dist"
+    "deploy": "cd .. && vercel --prod"
   },
   "dependencies": {
     "@api3/airnode-protocol": "^0.10.0",
