@@ -14,6 +14,18 @@ function latestEvent(transaction) {
   return transaction.events[transaction.events.length - 1].name;
 }
 
+function receiptLines(transaction) {
+  return [
+    ["Hash", shortHash(transaction.hash)],
+    ["Method", transaction.method],
+    ["Value", `${transaction.valueEth} ETH`],
+    ["Confirmations", `${transaction.confirmations}/3`],
+    ["Event", latestEvent(transaction)],
+    transaction.requestId && ["Request", shortHash(transaction.requestId)],
+    transaction.winningNumber && ["Winner", transaction.winningNumber],
+  ].filter(Boolean);
+}
+
 export default function TransactionRail() {
   const notice = useStore((state) => state.web3Demo.notice);
   const transactions = useStore((state) => state.web3Demo.transactions);
@@ -52,47 +64,32 @@ export default function TransactionRail() {
 
       {activeTransaction && (
         <article className={`receipt-card ${activeTransaction.status}`}>
-          <div className="receipt-stamp">
+          <div
+            className="receipt-stamp"
+            aria-label={`status ${statusLabel(activeTransaction.status)}`}
+          >
             {statusLabel(activeTransaction.status)}
           </div>
-          <dl>
-            <div>
-              <dt>Hash</dt>
-              <dd>{shortHash(activeTransaction.hash)}</dd>
-            </div>
-            <div>
-              <dt>Method</dt>
-              <dd>{activeTransaction.method}</dd>
-            </div>
-            <div>
-              <dt>Value</dt>
-              <dd>{activeTransaction.valueEth} ETH</dd>
-            </div>
-            <div>
-              <dt>Confirmations</dt>
-              <dd>{activeTransaction.confirmations}/3</dd>
-            </div>
-            <div>
-              <dt>Event</dt>
-              <dd>{latestEvent(activeTransaction)}</dd>
-            </div>
-            {activeTransaction.requestId && (
-              <div>
-                <dt>Request</dt>
-                <dd>{shortHash(activeTransaction.requestId)}</dd>
+          <dl className="receipt-lines">
+            {receiptLines(activeTransaction).map(([label, value], index) => (
+              <div
+                key={`${activeTransaction.id}-${label}`}
+                style={{ "--line-index": index }}
+              >
+                <dt>{label}</dt>
+                <dd>{value}</dd>
               </div>
-            )}
-            {activeTransaction.winningNumber && (
-              <div>
-                <dt>Winner</dt>
-                <dd>{activeTransaction.winningNumber}</dd>
-              </div>
-            )}
+            ))}
           </dl>
 
           <ol className="timeline">
             {activeTransaction.timeline.map((item, index) => (
-              <li key={`${activeTransaction.id}-${index}`}>{item.label}</li>
+              <li
+                key={`${activeTransaction.id}-${index}`}
+                style={{ "--line-index": index + 7 }}
+              >
+                {item.label}
+              </li>
             ))}
           </ol>
         </article>

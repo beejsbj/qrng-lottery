@@ -1,7 +1,8 @@
 inner-column {
   display: grid;
-  gap: 10px;
+  gap: clamp(12px, 1.8vw, 22px);
   /*box-shadow: 5px 5px 105px  dimgray;*/
+  overflow: visible;
 }
 
 inner-column > h1 {
@@ -112,8 +113,9 @@ past-card h2 {
 }
 
 @media (min-width: 600px) and (max-width: 925px) {
-	inner-column {
+  inner-column {
 	  grid-template-columns: repeat(12, 1fr);
+    width: min(calc(100% - 28px), var(--standard));
 	}
  
 	inner-column > h1 {
@@ -164,6 +166,7 @@ past-card h2 {
 @media (min-width: 925px) {
   inner-column {
     grid-template-columns: repeat(12, 1fr);
+    width: min(calc(100% - 48px), var(--standard));
   }
 
   inner-column > h1 {
@@ -171,7 +174,7 @@ past-card h2 {
   }
 
   lottery-module {
-    grid-column: 6 / 13;
+    grid-column: 6 / 12;
     grid-row: 2 / 5;
   }
 
@@ -206,6 +209,7 @@ past-card h2 {
 @media (min-width: 1500px) {
   lottery-module {
     grid-row: 2 / 5;
+    grid-column: 6 / 13;
   }
 
   lottery-module ul {
@@ -219,6 +223,7 @@ past-card h2 {
 lottery-module {
   display: grid;
   gap: 10px;
+  min-width: 0;
 }
 
 lottery-module > * {
@@ -230,6 +235,7 @@ lottery-module .buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   /* overflow: hidden; */
+  min-width: 0;
 }
 
 lottery-module .buttons button {
@@ -240,10 +246,20 @@ lottery-module .buttons button {
 lottery-module ul {
   background-color: black;
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   justify-items: center;
-  gap: 10px;
-  padding: 20px;
+  gap: clamp(7px, 1.2vw, 14px);
+  padding: clamp(14px, 2vw, 24px);
+  width: 100%;
+  overflow: visible;
+  transform-origin: center;
+}
+
+lottery-module ul li {
+  display: grid;
+  justify-items: center;
+  max-width: none;
+  min-width: 0;
   width: 100%;
 }
 
@@ -254,24 +270,27 @@ lottery-module ul .dials {
 }
 
 lottery-module ul label {
-  padding: 20px;
+  aspect-ratio: 1 / 1;
   background-color: white;
+  display: block;
   position: relative;
   cursor: url(../assets/pointer.cur), pointer;
   color: black;
   transition: 0.2s;
+  width: clamp(42px, 5.2vw, 64px);
+  max-width: 100%;
 }
 
 lottery-module ul li:nth-of-type(3n + 1) label {
-  animation: passiveSkew infinite 1s;
+  animation: passiveSkew 2.4s steps(2, end) 3;
 }
 
 lottery-module ul li:nth-of-type(3n + 2) label {
-  animation: passiveSkew infinite reverse 1s;
+  animation: passiveSkew 2.6s steps(2, end) 3 reverse;
 }
 
 lottery-module ul li:nth-of-type(3n + 3) label {
-  animation: passiveSkew infinite 1s -0.5s;
+  animation: passiveSkew 2.2s steps(2, end) 3 -0.5s;
 }
 
 lottery-module ul li:nth-of-type(odd) label:hover {
@@ -279,7 +298,7 @@ lottery-module ul li:nth-of-type(odd) label:hover {
   filter: sepia(50%) saturate(3);
   /*background-color: hsla(60, 100%, 50%, 1.00);*/
   animation: tiltScale 0.1s;
-  transform: scale(1.2) rotate(-15deg);
+  transform: scale(1.14) rotate(-13deg);
   font-family: "expose";
   background-color: transparent;
   color: black;
@@ -289,7 +308,7 @@ lottery-module ul li:nth-of-type(even) label:hover {
   transition: 0.01s;
   filter: sepia(50%) saturate(3);
   animation: alttiltScale 0.1s;
-  transform: scale(1.2) rotate(15deg);
+  transform: scale(1.14) rotate(13deg);
   background-color: transparent;
   color: black;
 }
@@ -341,16 +360,16 @@ lottery-module ul .dials + label:hover::before {
 lottery-module ul li:nth-of-type(odd) .dials:checked + label {
   transition: 10ms;
   background-color: yellow;
-  transform: scale(1.2) rotate(-15deg);
-  animation: none;
+  transform: scale(1.14) rotate(-13deg);
+  animation: slipPunch 180ms steps(2, end) both;
 }
 
 lottery-module ul li:nth-of-type(even) .dials:checked + label {
   transition: 10ms;
 
   background-color: yellow;
-  transform: scale(1.2) rotate(15deg);
-  animation: none;
+  transform: scale(1.14) rotate(13deg);
+  animation: slipPunchAlt 180ms steps(2, end) both;
 }
 
 lottery-module .dials:checked + label span {
@@ -375,7 +394,7 @@ lottery-module ul li .dials:checked + label::before {
   transform: translate(-50%, -50%) scale(3) rotate(5deg);
   padding: 20px;
   background-color: red;
-  background-image: url("../paper.jpg");
+  background-image: url("../assets/paper.jpg");
   background-size: cover;
   background-blend-mode: multiply;
   color: white;
@@ -431,6 +450,100 @@ lottery-module ul li .dials:checked + label::before {
 
 .pot-beat-change {
   animation: potBeatChange 1s cubic-bezier(0.54, -0.75, 0, 1.64);
+}
+
+.dial-board.is-rolling {
+  animation: boardShuffle 680ms steps(5, end) both;
+}
+
+lottery-module ul .punched-slip::after {
+  animation: joltalt 0.16s ease-out;
+}
+
+lottery-module ul .punched-slip::before {
+  animation: jolt 0.16s ease-out;
+}
+
+@media (max-width: 599px) {
+  inner-column {
+    gap: 14px;
+    grid-template-columns: 1fr;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 24px;
+    width: min(calc(100% - 28px), var(--standard));
+  }
+
+  inner-column > h1 {
+    margin-bottom: 6px;
+    order: 0;
+  }
+
+  lottery-module {
+    grid-column: auto;
+    grid-row: auto;
+    order: 1;
+    width: 100%;
+  }
+
+  bid-card {
+    grid-column: auto;
+    grid-row: auto;
+    order: 2;
+    width: 100%;
+  }
+
+  past-card {
+    grid-column: auto;
+    grid-row: auto;
+    order: 4;
+    width: 100%;
+  }
+
+  rules-card {
+    grid-column: auto;
+    grid-row: auto;
+    order: 5;
+    width: 100%;
+  }
+
+  .flipdown {
+    grid-column: auto;
+    grid-row: auto;
+    order: 6;
+  }
+
+  lottery-module ul {
+    gap: 4px;
+    padding: 12px 8px;
+  }
+
+  lottery-module ul label {
+    width: clamp(34px, 11.5vw, 42px);
+  }
+
+  lottery-module .buttons button {
+    font-size: clamp(1.35rem, 10vw, 2.1rem);
+    min-width: 0;
+    padding: 16px 8px;
+  }
+
+  bid-card ticket-card,
+  bid-card text-content,
+  past-card,
+  rules-card {
+    padding: 16px;
+  }
+
+  ticket-card div {
+    padding: 0;
+  }
+
+  bid-card,
+  past-card,
+  rules-card {
+    transform: none;
+  }
 }
 
 @keyframes potBeatChange {

@@ -2,6 +2,7 @@ import ResetLottery from "./ResetLottery";
 import { useState, useEffect } from "react";
 import { Howl } from "howler";
 import useStore from "../../store";
+import stampSound from "../../assets/stamp.mp3";
 
 export default function Lottery(props) {
   const max = 5; //total number of dials to check
@@ -14,6 +15,7 @@ export default function Lottery(props) {
   });
 
   const [dials, setDials] = useState(dialsArr);
+  const [isRolling, setIsRolling] = useState(false);
   const selectedNumbers = useStore((state) => state.numbers.selected);
   const setNumbers = useStore((state) => state.numbers.setNumbers);
   const buyTicket = useStore((state) => state.web3Demo.startTicketPurchase);
@@ -26,6 +28,10 @@ export default function Lottery(props) {
   const sound = new Howl({
     src: ["/click.wav"],
   });
+  const stamp = new Howl({
+    src: [stampSound],
+    volume: 0.55,
+  });
 
   function maxLimit() {
     const checked = dials.filter((dial) => dial.checked);
@@ -33,31 +39,38 @@ export default function Lottery(props) {
   }
 
   function resetDials() {
-    const updatedDials = dials.map((dial) => {
-      dial.checked = false;
-      return dial;
-    });
+    const updatedDials = dials.map((dial) => ({
+      ...dial,
+      checked: false,
+      class: "",
+    }));
     setDials(updatedDials);
   }
 
   function removeRollClass() {
-    const updatedDials = dials.map((dial) => {
-      dial.class = "";
-      return dial;
-    });
-    setDials(updatedDials);
+    setDials((currentDials) =>
+      currentDials.map((dial) => ({ ...dial, class: "" }))
+    );
   }
 
   function rollChecked() {
-    //   randomly check "max" dials
     const toChecks = getRndIntArr();
-    const updatedDials = dials.map((dial, i) => {
-      if (toChecks.includes(i)) {
-        dial.checked = true;
-      }
-      return dial;
+    toChecks.forEach((dialIndex, stampIndex) => {
+      setTimeout(() => {
+        setDials((currentDials) =>
+          currentDials.map((dial, i) =>
+            i === dialIndex
+              ? {
+                  ...dial,
+                  checked: true,
+                  class: `punched-slip punch-${stampIndex}`,
+                }
+              : dial
+          )
+        );
+        stamp.play();
+      }, stampIndex * 115);
     });
-    setDials(updatedDials);
   }
 
   function getRndIntArr() {
@@ -81,7 +94,11 @@ export default function Lottery(props) {
     }
     const updatedDials = dials.map((dial) => {
       if (dial.number == number) {
-        dial.checked = event.target.checked;
+        return {
+          ...dial,
+          checked: event.target.checked,
+          class: event.target.checked ? "punched-slip" : "",
+        };
       }
       return dial;
     });
@@ -91,21 +108,24 @@ export default function Lottery(props) {
   async function handleRoll(event) {
     event.preventDefault();
 
+    setIsRolling(true);
     event.target.style.pointerEvents = "none";
     resetDials();
 
-    const updatedDials = dials.map((dial) => {
-      dial.class =
-        dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse";
-      return dial;
-    });
+    const updatedDials = dials.map((dial) => ({
+      ...dial,
+      checked: false,
+      class:
+        dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse",
+    }));
 
     setDials(updatedDials);
-    setTimeout(rollChecked, 1100);
+    setTimeout(rollChecked, 720);
     setTimeout(() => {
       removeRollClass();
       event.target.style.pointerEvents = "auto";
-    }, 1200);
+      setIsRolling(false);
+    }, 1450);
   }
 
   async function handleSubmit(event) {
@@ -125,7 +145,7 @@ export default function Lottery(props) {
     >
       <ResetLottery shakeConnectButton={props.shakeConnectButton} />
       <form>
-        <ul>
+        <ul className={isRolling ? "dial-board is-rolling" : "dial-board"}>
           {dials.map((dial) => (
             <li key={`dialKey-${dial.number}`}>
               <input

@@ -45,7 +45,7 @@ export default function DemoWalletPanel() {
         {prompt.type === "connect" && (
           <section className="wallet-connect-body">
             <h2 className="attention-voice">Connect demo wallet</h2>
-            <dl>
+            <dl className="wallet-contract-slip">
               <div>
                 <dt>Network</dt>
                 <dd>{wallet.chainName}</dd>
@@ -84,7 +84,7 @@ export default function DemoWalletPanel() {
         {prompt.type === "transaction" && (
           <section className="wallet-transaction-body">
             <h2 className="attention-voice">{intent.label}</h2>
-            <dl>
+            <dl className="wallet-contract-slip">
               <div>
                 <dt>Contract</dt>
                 <dd>{shortHash(contractAddress)}</dd>

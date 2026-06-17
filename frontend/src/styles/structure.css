@@ -11,11 +11,11 @@ main {
 
 inner-column {
 	display: block;
-	width: 98%;
+	width: min(calc(100% - 32px), var(--standard));
 	max-width: var(--standard); /* could be a variable in settings */
 	margin-right: auto;
 	margin-left: auto;
-	padding: 40px 10px; /* a loose default */
+	padding: 40px clamp(12px, 2vw, 28px); /* a loose default */
 
 }
 

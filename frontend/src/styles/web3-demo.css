@@ -1,12 +1,16 @@
 transaction-rail {
-  background: var(--shade);
-  color: white;
+  background: white;
+  background-image: url("../assets/paper.jpg");
+  background-size: cover;
+  border: 4px solid black;
+  color: black;
   display: grid;
   gap: 14px;
   padding: 18px;
   position: relative;
   box-shadow: -5px -5px black;
   transform: rotate(1deg);
+  min-width: 0;
 }
 
 transaction-rail header {
@@ -18,6 +22,7 @@ transaction-rail header {
 
 transaction-rail h2 {
   background: black;
+  color: white;
   display: inline-block;
   padding: 5px;
   transform: rotate(-1deg);
@@ -32,7 +37,7 @@ transaction-rail dl,
 transaction-rail dl div,
 .demo-wallet-panel dl div {
   align-items: baseline;
-  border-bottom: 2px dotted rgba(255, 255, 255, 0.28);
+  border-bottom: 2px dotted rgba(0, 0, 0, 0.3);
   display: grid;
   gap: 8px;
   grid-template-columns: minmax(92px, 0.45fr) 1fr;
@@ -41,7 +46,7 @@ transaction-rail dl div,
 
 transaction-rail dt,
 .demo-wallet-panel dt {
-  color: yellow;
+  color: var(--shade);
   font-family: "Luckiest Guy", cursive;
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -56,8 +61,8 @@ transaction-rail dd,
 
 .web3-notice {
   align-items: center;
-  background: white;
-  color: black;
+  background: black;
+  color: white;
   display: flex;
   gap: 10px;
   justify-content: space-between;
@@ -68,28 +73,34 @@ transaction-rail dd,
 .web3-notice p,
 .empty-receipt p {
   font-size: 1rem;
+  overflow-wrap: anywhere;
 }
 
 .web3-notice button,
 .wallet-close {
-  background: black;
-  color: white;
+  background: white;
+  border: 2px solid black;
+  color: black;
   cursor: url(../assets/pointer.cur), pointer;
   font-family: "Luckiest Guy", cursive;
   padding: 4px 8px;
 }
 
 .empty-receipt {
-  border: 2px dashed rgba(255, 255, 255, 0.45);
+  border: 2px dashed rgba(0, 0, 0, 0.45);
   padding: 14px;
 }
 
 .receipt-card {
   background: white;
+  background-image: url("../assets/paper.jpg");
+  background-size: cover;
+  border: 2px solid black;
   color: black;
   display: grid;
   gap: 12px;
-  padding: 14px;
+  overflow: hidden;
+  padding: 16px;
   position: relative;
 }
 
@@ -118,6 +129,7 @@ transaction-rail dd,
 .receipt-stamp {
   align-self: start;
   background: var(--color);
+  border: 2px solid black;
   color: white;
   display: inline-block;
   font-family: "expose", "Luckiest Guy", cursive;
@@ -125,6 +137,9 @@ transaction-rail dd,
   justify-self: start;
   padding: 2px 10px;
   transform: rotate(-4deg);
+  animation: stampLand 260ms steps(3, end) both;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .receipt-card.confirmed .receipt-stamp,
@@ -148,6 +163,8 @@ transaction-rail dd,
 }
 
 .timeline li {
+  animation: receiptLinePrint 420ms steps(12, end) both;
+  animation-delay: calc(var(--line-index) * 70ms);
   font-size: 0.92rem;
   max-width: none;
   position: relative;
@@ -172,7 +189,8 @@ transaction-rail dd,
 
 .receipt-history li {
   align-items: center;
-  background: rgba(0, 0, 0, 0.35);
+  background: black;
+  color: white;
   display: flex;
   font-family: monospace;
   font-size: 0.82rem;
@@ -180,6 +198,13 @@ transaction-rail dd,
   justify-content: space-between;
   max-width: none;
   padding: 8px;
+  transform: rotate(-0.5deg);
+}
+
+.receipt-lines div {
+  animation: receiptLinePrint 420ms steps(12, end) both;
+  animation-delay: calc(var(--line-index) * 70ms);
+  transform-origin: left center;
 }
 
 .demo-wallet-backdrop {
@@ -190,10 +215,12 @@ transaction-rail dd,
 }
 
 .demo-wallet-panel {
-  background: black;
-  border: 4px solid white;
+  background: white;
+  background-image: url("../assets/paper.jpg");
+  background-size: cover;
+  border: 4px solid black;
   box-shadow: -8px 8px 0 var(--shade);
-  color: white;
+  color: black;
   display: grid;
   gap: 18px;
   max-width: min(520px, calc(100vw - 28px));
@@ -212,9 +239,12 @@ transaction-rail dd,
 }
 
 .demo-wallet-panel h2 {
+  background: black;
   color: white;
   font-size: clamp(2rem, 6vw, 4rem);
   line-height: 0.9;
+  padding: 4px 10px;
+  transform: rotate(1deg);
 }
 
 .wallet-connect-body,
@@ -233,9 +263,55 @@ transaction-rail dd,
   font-size: clamp(1.25rem, 4vw, 2rem);
 }
 
+.demo-wallet-panel .button.outline {
+  border-color: black;
+  color: black;
+}
+
 .wallet-actions .button:disabled {
   filter: grayscale(1);
   opacity: 0.75;
+}
+
+.wallet-contract-slip {
+  border: 2px solid black;
+  padding: 12px;
+  position: relative;
+}
+
+.wallet-contract-slip::after {
+  background: var(--shade);
+  color: white;
+  content: "SIGN";
+  font-family: "expose", "Luckiest Guy", cursive;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  padding: 0 8px;
+  position: absolute;
+  right: 10px;
+  top: -18px;
+  transform: rotate(8deg);
+}
+
+@keyframes receiptLinePrint {
+  0% {
+    opacity: 0;
+    transform: translateY(-3px) skewX(8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewX(0deg);
+  }
+}
+
+@keyframes stampLand {
+  0% {
+    opacity: 0;
+    transform: scale(1.7) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+  }
 }
 
 @media (min-width: 600px) and (max-width: 925px) {
@@ -254,7 +330,11 @@ transaction-rail dd,
 
 @media (max-width: 599px) {
   transaction-rail {
+    grid-column: auto;
+    grid-row: auto;
+    order: 3;
     transform: none;
+    width: 100%;
   }
 
   transaction-rail dl div,
@@ -269,6 +349,8 @@ transaction-rail dd,
     top: auto;
     transform: rotate(0deg);
     width: auto;
+    max-height: calc(100vh - 28px);
+    overflow: auto;
   }
 
   .wallet-actions {
