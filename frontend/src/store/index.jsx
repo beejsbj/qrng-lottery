@@ -25,7 +25,6 @@ const useStore = create(
 
     setHasLotteryEnded: () => {
       const currentTime = Math.floor(new Date().getTime() / 1000);
-      console.log(currentTime, get().endTime.value);
       if (currentTime >= get().endTime.value) {
         set({ hasLotteryEnded: true });
       } else {

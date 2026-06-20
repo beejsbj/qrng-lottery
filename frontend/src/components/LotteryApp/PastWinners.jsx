@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useStore from "../../store";
 
 export default function PastWinners() {
-  const [winners, setWinners] = useState([335, 500, 1100.11]);
-
   //winning number of last N weeks
   const getWinningNumbers = useStore(
     (state) => state.winner.getLastNWeeksWinningNumber
@@ -25,19 +23,24 @@ export default function PastWinners() {
 
   return (
     <past-card class="slide-in-left">
-      <h2 className="teaser-voice">past winners</h2>
+      <header>
+        <p className="ticket-kicker">ledger</p>
+        <h2 className="teaser-voice">past winners</h2>
+      </header>
 
-      <ol>
+      <ol className="winner-board">
         {WinningNumbers.map((WinningNumber, i) => {
-          if (WinningNumber.length == 1) {
-            WinningNumber = "0" + WinningNumber;
-          }
+          const winningNumber = String(WinningNumber).padStart(2, "0");
+          const winningPot = WinningPots[i] ?? "--";
           return (
             <li
               key={i}
-              className={i == 0 ? "attention-voice" : "attention-voice"}
+              className={i == 0 ? "winner-row latest" : "winner-row"}
             >
-              {WinningNumber} ⇒ Ξ {WinningPots[i]}
+              <span className="winner-rank">#{i + 1}</span>
+              <span className="winner-number">{winningNumber}</span>
+              <span className="winner-pot">Ξ {winningPot}</span>
+              <span className="winner-week">week {3 - i}</span>
             </li>
           );
         })}

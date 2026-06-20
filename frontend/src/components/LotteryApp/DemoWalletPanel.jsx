@@ -29,7 +29,19 @@ export default function DemoWalletPanel() {
 
   return (
     <div className="demo-wallet-backdrop">
-      <aside className="demo-wallet-panel" aria-live="polite">
+      <div className="wallet-annotation-layer" aria-hidden="true">
+        <span className="wallet-paper-mark wallet-paper-mark-top" />
+        <span className="wallet-ink-arrow wallet-ink-arrow-primary" />
+        <span className="wallet-ink-arrow wallet-ink-arrow-secondary" />
+        <span className="wallet-paper-mark wallet-paper-mark-bottom" />
+      </div>
+      <aside
+        className="demo-wallet-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label={promptTitle(prompt)}
+        aria-live="polite"
+      >
         <header>
           <p className="teaser-voice">{promptTitle(prompt)}</p>
           <button

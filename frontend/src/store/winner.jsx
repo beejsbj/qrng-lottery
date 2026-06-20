@@ -17,7 +17,6 @@ export const winner = (set, get) => ({
       Math.floor(Math.random() * 50) + 1,
       Math.floor(Math.random() * 50) + 1,
     ];
-    console.log(data);
 
     set((state) => ({
       ...state,
@@ -44,7 +43,6 @@ export const winner = (set, get) => ({
       Math.floor(Math.random() * 1000) + 1,
       Math.floor(Math.random() * 1000) + 1,
     ];
-    console.log(data);
 
     set((state) => ({
       ...state,

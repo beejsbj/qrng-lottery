@@ -23,12 +23,16 @@ export default function BidCard(props) {
     <bid-card class="slide-in-left">
       <TicketCard />
       <text-content>
-        <h2 className="teaser-voice">current bid</h2>
+        <header>
+          <p className="ticket-kicker">live pot</p>
+          <h2 className="teaser-voice">current bid</h2>
+        </header>
         {
           <p htmlFor="user-bid" id="current-bid" className={amountClass}>
             Ξ {amount}
           </p>
         }
+        <p className="bid-note">prints into the next receipt</p>
       </text-content>
     </bid-card>
   );

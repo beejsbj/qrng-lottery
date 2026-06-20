@@ -1,8 +1,12 @@
 import ResetLottery from "./ResetLottery";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Howl } from "howler";
 import useStore from "../../store";
 import stampSound from "../../assets/stamp.mp3";
+
+const FIRST_ROLL_STAMP_DELAY = 260;
+const STAMP_STAGGER_DELAY = 115;
+const ROLL_SETTLE_DELAY = 1180;
 
 export default function Lottery(props) {
   const max = 5; //total number of dials to check
@@ -20,18 +24,67 @@ export default function Lottery(props) {
   const setNumbers = useStore((state) => state.numbers.setNumbers);
   const buyTicket = useStore((state) => state.web3Demo.startTicketPurchase);
   const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
+  const rollTimers = useRef([]);
 
   useEffect(() => {
     setNumbers(dials.filter((dial) => dial.checked).map((dial) => dial.number));
   }, [dials]);
 
-  const sound = new Howl({
+  const controlSound = useMemo(() => new Howl({
     src: ["/click.wav"],
-  });
-  const stamp = new Howl({
+    volume: 0.16,
+    rate: 1.08,
+  }), []);
+  const stamp = useMemo(() => new Howl({
     src: [stampSound],
-    volume: 0.55,
-  });
+    volume: 0.42,
+  }), []);
+
+  const playControlSound = useCallback(
+    (rate = 1.08) => {
+      controlSound.rate(rate);
+      controlSound.stop();
+      controlSound.play();
+    },
+    [controlSound]
+  );
+
+  const playStampSound = useCallback(() => {
+    stamp.stop();
+    stamp.play();
+  }, [stamp]);
+
+  const clearRollTimers = useCallback(() => {
+    rollTimers.current.forEach((timer) => clearTimeout(timer));
+    rollTimers.current = [];
+  }, []);
+
+  useEffect(() => {
+    const handleControlPress = (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest("button");
+
+      if (!button || button.disabled) return;
+      if (!button.closest("lottery-module, bid-card, .reset-lottery")) return;
+
+      const rate = button.classList.contains("plus")
+        ? 1.18
+        : button.classList.contains("minus")
+        ? 0.98
+        : 1.08;
+
+      playControlSound(rate);
+    };
+
+    document.addEventListener("pointerdown", handleControlPress, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handleControlPress, true);
+    };
+  }, [playControlSound]);
+
+  useEffect(() => clearRollTimers, [clearRollTimers]);
 
   function maxLimit() {
     const checked = dials.filter((dial) => dial.checked);
@@ -56,7 +109,7 @@ export default function Lottery(props) {
   function rollChecked() {
     const toChecks = getRndIntArr();
     toChecks.forEach((dialIndex, stampIndex) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setDials((currentDials) =>
           currentDials.map((dial, i) =>
             i === dialIndex
@@ -68,8 +121,9 @@ export default function Lottery(props) {
               : dial
           )
         );
-        stamp.play();
-      }, stampIndex * 115);
+        playStampSound();
+      }, stampIndex * STAMP_STAGGER_DELAY);
+      rollTimers.current.push(timer);
     });
   }
 
@@ -87,7 +141,7 @@ export default function Lottery(props) {
 
   //event handler
   function toggleChecked(number, event) {
-    sound.play();
+    playControlSound(event.target.checked ? 1.12 : 0.95);
     if (event.target.checked && !maxLimit()) {
       alert("Can only Select " + max);
       return;
@@ -108,8 +162,10 @@ export default function Lottery(props) {
   async function handleRoll(event) {
     event.preventDefault();
 
+    const rollButton = event.currentTarget;
+    clearRollTimers();
     setIsRolling(true);
-    event.target.style.pointerEvents = "none";
+    rollButton.style.pointerEvents = "none";
     resetDials();
 
     const updatedDials = dials.map((dial) => ({
@@ -120,12 +176,12 @@ export default function Lottery(props) {
     }));
 
     setDials(updatedDials);
-    setTimeout(rollChecked, 720);
-    setTimeout(() => {
+    rollTimers.current.push(setTimeout(rollChecked, FIRST_ROLL_STAMP_DELAY));
+    rollTimers.current.push(setTimeout(() => {
       removeRollClass();
-      event.target.style.pointerEvents = "auto";
+      rollButton.style.pointerEvents = "auto";
       setIsRolling(false);
-    }, 1450);
+    }, ROLL_SETTLE_DELAY));
   }
 
   async function handleSubmit(event) {
@@ -136,6 +192,12 @@ export default function Lottery(props) {
     }
     buyTicket();
   }
+
+  const boardStatus = isRolling
+    ? "shaking slips"
+    : selectedNumbers.length >= max
+    ? "wallet approval next"
+    : `${selectedNumbers.length} / ${max} punched`;
 
   return (
     <lottery-module
@@ -168,6 +230,9 @@ export default function Lottery(props) {
             </li>
           ))}
         </ul>
+        <div className="board-status" aria-live="polite">
+          <span>{boardStatus}</span>
+        </div>
         <div className="buttons">
           <button
             className={`roll attention-voice button`}

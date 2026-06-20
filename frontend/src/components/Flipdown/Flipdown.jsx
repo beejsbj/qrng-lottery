@@ -1,6 +1,32 @@
 // import "./flipdown.css";
 import { useEffect } from "react";
+import { Howl } from "howler";
 import useStore from "../../store";
+
+const countdownFlipSound = new Howl({
+  src: ["/click.wav"],
+  volume: 0.07,
+  rate: 1.45,
+});
+
+let countdownAudioUnlocked = false;
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+function playCountdownFlipSound() {
+  if (!countdownAudioUnlocked) return;
+  if (prefersReducedMotion()) return;
+  if (document.hidden) return;
+
+  countdownFlipSound.stop();
+  countdownFlipSound.play();
+}
 
 export default function Flipdown(props) {
   const endTime = useStore((state) => state.endTime.value);
@@ -8,15 +34,40 @@ export default function Flipdown(props) {
   const setHasLotteryEnded = useStore((state) => state.setHasLotteryEnded);
 
   useEffect(() => {
-    console.log(endTime);
+    const unlockCountdownAudio = () => {
+      countdownAudioUnlocked = true;
+    };
+
+    window.addEventListener("pointerdown", unlockCountdownAudio, {
+      capture: true,
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("keydown", unlockCountdownAudio, {
+      capture: true,
+      once: true,
+    });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockCountdownAudio, true);
+      window.removeEventListener("keydown", unlockCountdownAudio, true);
+    };
+  }, []);
+
+  useEffect(() => {
     setHasLotteryEnded();
     if (!endTime) return;
-    var flipdown = new FlipDown(Number(endTime));
+    var flipdown = new FlipDown(Number(endTime), "flipdown", {
+      onFlip: playCountdownFlipSound,
+    });
     flipdown.start();
     flipdown.ifEnded(() => {
-      console.log("The countdown has ended!");
       setHasLotteryEnded();
     });
+
+    return () => {
+      flipdown.stop();
+    };
   }, [endTime]);
 
   useEffect(() => {
@@ -92,8 +143,6 @@ class FlipDown {
     // Set options
     this._setOptions();
 
-    // Print Version
-    console.log(`FlipDown ${this.version} (Theme: ${this.opts.theme})`);
   }
 
   /**
@@ -181,6 +230,7 @@ class FlipDown {
       // Theme
       theme: opt.hasOwnProperty("theme") ? opt.theme : "dark",
       headings,
+      onFlip: typeof opt.onFlip === "function" ? opt.onFlip : null,
     };
   }
 
@@ -337,6 +387,15 @@ class FlipDown {
     this._hasCountdownEnded();
   }
 
+  stop() {
+    if (this.countdown) {
+      clearInterval(this.countdown);
+      this.countdown = null;
+    }
+
+    return this;
+  }
+
   /**
    * @name _updateClockValues
    * @description Update the clock face values
@@ -382,10 +441,13 @@ class FlipDown {
     }
 
     function rotorLeafRearFlip() {
+      var didFlip = false;
+
       this.rotorLeafRear.forEach((el, i) => {
         if (el.textContent != this.clockValuesAsString[i]) {
           el.textContent = this.clockValuesAsString[i];
           el.parentElement.classList.add("flipped");
+          didFlip = true;
           var flip = setInterval(
             function () {
               el.parentElement.classList.remove("flipped");
@@ -395,6 +457,10 @@ class FlipDown {
           );
         }
       });
+
+      if (didFlip && this.opts.onFlip) {
+        this.opts.onFlip();
+      }
     }
 
     // Init
