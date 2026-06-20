@@ -1,7 +1,3 @@
-import { readContract } from "@wagmi/core";
-import { BigNumber } from "ethers";
-import tokenContract from "../contracts/lottery.json";
-
 export const endTime = (set, get) => ({
   value: 0,
 

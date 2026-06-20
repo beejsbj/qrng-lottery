@@ -1,14 +1,14 @@
 import ResetLottery from "./ResetLottery";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Howl } from "howler";
 import useStore from "../../store";
-import { useAccount } from "wagmi";
+import stampSound from "../../assets/stamp.mp3";
+
+const FIRST_ROLL_STAMP_DELAY = 260;
+const STAMP_STAGGER_DELAY = 115;
+const ROLL_SETTLE_DELAY = 1180;
 
 export default function Lottery(props) {
-  const { isConnected } = useAccount();
-
-  const [buttonDisabled, setButtonDisabled] = useState(isConnected ? "" : "");
-
   const max = 5; //total number of dials to check
   let dialsArr = Array.from(Array(50).keys());
   dialsArr = dialsArr.map((dial) => {
@@ -19,18 +19,72 @@ export default function Lottery(props) {
   });
 
   const [dials, setDials] = useState(dialsArr);
+  const [isRolling, setIsRolling] = useState(false);
   const selectedNumbers = useStore((state) => state.numbers.selected);
   const setNumbers = useStore((state) => state.numbers.setNumbers);
-  const buyTicket = useStore((state) => state.ticket.writeContract);
+  const buyTicket = useStore((state) => state.web3Demo.startTicketPurchase);
   const hasLotteryEnded = useStore((state) => state.hasLotteryEnded);
+  const rollTimers = useRef([]);
 
   useEffect(() => {
     setNumbers(dials.filter((dial) => dial.checked).map((dial) => dial.number));
   }, [dials]);
 
-  const sound = new Howl({
+  const controlSound = useMemo(() => new Howl({
     src: ["/click.wav"],
-  });
+    volume: 0.16,
+    rate: 1.08,
+  }), []);
+  const stamp = useMemo(() => new Howl({
+    src: [stampSound],
+    volume: 0.42,
+  }), []);
+
+  const playControlSound = useCallback(
+    (rate = 1.08) => {
+      controlSound.rate(rate);
+      controlSound.stop();
+      controlSound.play();
+    },
+    [controlSound]
+  );
+
+  const playStampSound = useCallback(() => {
+    stamp.stop();
+    stamp.play();
+  }, [stamp]);
+
+  const clearRollTimers = useCallback(() => {
+    rollTimers.current.forEach((timer) => clearTimeout(timer));
+    rollTimers.current = [];
+  }, []);
+
+  useEffect(() => {
+    const handleControlPress = (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest("button");
+
+      if (!button || button.disabled) return;
+      if (!button.closest("lottery-module, bid-card, .reset-lottery")) return;
+
+      const rate = button.classList.contains("plus")
+        ? 1.18
+        : button.classList.contains("minus")
+        ? 0.98
+        : 1.08;
+
+      playControlSound(rate);
+    };
+
+    document.addEventListener("pointerdown", handleControlPress, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handleControlPress, true);
+    };
+  }, [playControlSound]);
+
+  useEffect(() => clearRollTimers, [clearRollTimers]);
 
   function maxLimit() {
     const checked = dials.filter((dial) => dial.checked);
@@ -38,31 +92,39 @@ export default function Lottery(props) {
   }
 
   function resetDials() {
-    const updatedDials = dials.map((dial) => {
-      dial.checked = false;
-      return dial;
-    });
+    const updatedDials = dials.map((dial) => ({
+      ...dial,
+      checked: false,
+      class: "",
+    }));
     setDials(updatedDials);
   }
 
   function removeRollClass() {
-    const updatedDials = dials.map((dial) => {
-      dial.class = "";
-      return dial;
-    });
-    setDials(updatedDials);
+    setDials((currentDials) =>
+      currentDials.map((dial) => ({ ...dial, class: "" }))
+    );
   }
 
   function rollChecked() {
-    //   randomly check "max" dials
     const toChecks = getRndIntArr();
-    const updatedDials = dials.map((dial, i) => {
-      if (toChecks.includes(i)) {
-        dial.checked = true;
-      }
-      return dial;
+    toChecks.forEach((dialIndex, stampIndex) => {
+      const timer = setTimeout(() => {
+        setDials((currentDials) =>
+          currentDials.map((dial, i) =>
+            i === dialIndex
+              ? {
+                  ...dial,
+                  checked: true,
+                  class: `punched-slip punch-${stampIndex}`,
+                }
+              : dial
+          )
+        );
+        playStampSound();
+      }, stampIndex * STAMP_STAGGER_DELAY);
+      rollTimers.current.push(timer);
     });
-    setDials(updatedDials);
   }
 
   function getRndIntArr() {
@@ -79,14 +141,18 @@ export default function Lottery(props) {
 
   //event handler
   function toggleChecked(number, event) {
-    sound.play();
+    playControlSound(event.target.checked ? 1.12 : 0.95);
     if (event.target.checked && !maxLimit()) {
       alert("Can only Select " + max);
       return;
     }
     const updatedDials = dials.map((dial) => {
       if (dial.number == number) {
-        dial.checked = event.target.checked;
+        return {
+          ...dial,
+          checked: event.target.checked,
+          class: event.target.checked ? "punched-slip" : "",
+        };
       }
       return dial;
     });
@@ -96,36 +162,42 @@ export default function Lottery(props) {
   async function handleRoll(event) {
     event.preventDefault();
 
-    event.target.style.pointerEvents = "none";
+    const rollButton = event.currentTarget;
+    clearRollTimers();
+    setIsRolling(true);
+    rollButton.style.pointerEvents = "none";
     resetDials();
 
-    const updatedDials = dials.map((dial) => {
-      dial.class =
-        dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse";
-      return dial;
-    });
+    const updatedDials = dials.map((dial) => ({
+      ...dial,
+      checked: false,
+      class:
+        dial.number % 2 == 0 ? "rotate-center" : "rotate-center-reverse",
+    }));
 
     setDials(updatedDials);
-    setTimeout(rollChecked, 1100);
-    setTimeout(() => {
+    rollTimers.current.push(setTimeout(rollChecked, FIRST_ROLL_STAMP_DELAY));
+    rollTimers.current.push(setTimeout(() => {
       removeRollClass();
-      event.target.style.pointerEvents = "auto";
-    }, 1200);
+      rollButton.style.pointerEvents = "auto";
+      setIsRolling(false);
+    }, ROLL_SETTLE_DELAY));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (buttonDisabled === "disabled") {
-      props.shakeConnectButton();
+    if (selectedNumbers.length < max) {
+      buyTicket();
       return;
     }
-    console.log(selectedNumbers.length);
-    if (selectedNumbers.length < max) {
-      // alert("Please select atleast 5");
-      // return;
-    }
-    await buyTicket();
+    buyTicket();
   }
+
+  const boardStatus = isRolling
+    ? "shaking slips"
+    : selectedNumbers.length >= max
+    ? "wallet approval next"
+    : `${selectedNumbers.length} / ${max} punched`;
 
   return (
     <lottery-module
@@ -133,12 +205,9 @@ export default function Lottery(props) {
         hasLotteryEnded ? "lottery-ended slide-in-right" : "slide-in-right"
       }`}
     >
-      <ResetLottery
-        buttonDisabled={buttonDisabled}
-        shakeConnectButton={props.shakeConnectButton}
-      />
+      <ResetLottery shakeConnectButton={props.shakeConnectButton} />
       <form>
-        <ul>
+        <ul className={isRolling ? "dial-board is-rolling" : "dial-board"}>
           {dials.map((dial) => (
             <li key={`dialKey-${dial.number}`}>
               <input
@@ -161,6 +230,9 @@ export default function Lottery(props) {
             </li>
           ))}
         </ul>
+        <div className="board-status" aria-live="polite">
+          <span>{boardStatus}</span>
+        </div>
         <div className="buttons">
           <button
             className={`roll attention-voice button`}
@@ -169,7 +241,7 @@ export default function Lottery(props) {
             ROLL
           </button>
           <button
-            className={`submit attention-voice button contained ${buttonDisabled}`}
+            className="submit attention-voice button contained"
             onClick={handleSubmit}
           >
             SUBMIT

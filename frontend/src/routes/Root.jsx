@@ -2,7 +2,6 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 
 export default function Root() {
   const location = useLocation();
-  console.log(location);
   return (
     <>
       <header>

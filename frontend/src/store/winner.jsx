@@ -1,7 +1,3 @@
-import { readContract, writeContract } from "@wagmi/core";
-import { BigNumber, ethers } from "ethers";
-import tokenContract from "../contracts/lottery.json";
-
 export const winner = (set, get) => ({
   LastNWeeksWinningNumber: [],
   LastNweeksWinningPot: [],
@@ -21,7 +17,6 @@ export const winner = (set, get) => ({
       Math.floor(Math.random() * 50) + 1,
       Math.floor(Math.random() * 50) + 1,
     ];
-    console.log(data);
 
     set((state) => ({
       ...state,
@@ -48,7 +43,6 @@ export const winner = (set, get) => ({
       Math.floor(Math.random() * 1000) + 1,
       Math.floor(Math.random() * 1000) + 1,
     ];
-    console.log(data);
 
     set((state) => ({
       ...state,

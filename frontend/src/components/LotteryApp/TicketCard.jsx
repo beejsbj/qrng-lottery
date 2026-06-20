@@ -17,16 +17,35 @@ export default function TicketCard() {
 
   return (
     <ticket-card>
-      <h2 className="teaser-voice">Buy your Tickets</h2>
-      <div>
-        <button className="minus button attention-voice" onClick={ticketDecrement}>
+      <header>
+        <p className="ticket-kicker">counter 01</p>
+        <h2 className="teaser-voice">Buy your Tickets</h2>
+      </header>
+      <div className="ticket-counter">
+        <button
+          className={`minus button attention-voice ${
+            ticket <= 1 ? "disabled" : ""
+          }`}
+          onClick={ticketDecrement}
+          aria-label="Remove one ticket"
+        >
           ﹣
         </button>
-        <p className="ticket-box loud-voice heartbeat">{ticket}</p>
-        <button className="plus button attention-voice" onClick={ticketIncrement}>
+        <p className="ticket-box loud-voice heartbeat">
+          <span>{ticket}</span>
+          <small>tickets</small>
+        </p>
+        <button
+          className={`plus button attention-voice ${
+            ticket >= 10 ? "disabled" : ""
+          }`}
+          onClick={ticketIncrement}
+          aria-label="Add one ticket"
+        >
           ＋
         </button>
       </div>
+      <p className="ticket-limit">max 10 per wallet approval</p>
     </ticket-card>
   );
 }
