@@ -1,7 +1,24 @@
 const WALLET_STORAGE_KEY = "qrng-lottery-demo-wallet";
 const TX_STORAGE_KEY = "qrng-lottery-demo-transactions";
+const TERMINAL_TRANSACTION_STATUSES = new Set(["receiptReady", "rejected"]);
+const PENDING_TRANSACTION_STATUSES = new Set([
+  "submitted",
+  "pending",
+  "confirming",
+  "confirmed",
+]);
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function disconnectedWallet() {
+  return {
+    status: "disconnected",
+    address: null,
+    balance: null,
+    chainId: 1337,
+    chainName: "QRNG Demo Chain",
+  };
+}
 
 function readJson(key, fallback) {
   if (typeof window === "undefined") return fallback;
@@ -45,18 +62,36 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+function normalizeWallet(wallet) {
+  if (wallet && wallet.status === "connected" && wallet.address) return wallet;
+  return disconnectedWallet();
+}
+
+function persistableTransactions(transactions) {
+  return Array.isArray(transactions)
+    ? transactions.filter(
+        (transaction) =>
+          transaction &&
+          transaction.id &&
+          Array.isArray(transaction.events) &&
+          Array.isArray(transaction.timeline) &&
+          TERMINAL_TRANSACTION_STATUSES.has(transaction.status)
+      )
+    : [];
+}
+
 function initialWallet() {
-  return readJson(WALLET_STORAGE_KEY, {
-    status: "disconnected",
-    address: null,
-    balance: null,
-    chainId: 1337,
-    chainName: "QRNG Demo Chain",
-  });
+  const wallet = normalizeWallet(
+    readJson(WALLET_STORAGE_KEY, disconnectedWallet())
+  );
+  writeJson(WALLET_STORAGE_KEY, wallet);
+  return wallet;
 }
 
 function initialTransactions() {
-  return readJson(TX_STORAGE_KEY, []);
+  const transactions = persistableTransactions(readJson(TX_STORAGE_KEY, []));
+  writeJson(TX_STORAGE_KEY, transactions);
+  return transactions;
 }
 
 function ticketIntent(get) {
@@ -91,6 +126,8 @@ function drawIntent() {
 }
 
 export const web3Demo = (set, get) => {
+  let connectSequence = 0;
+
   function updateDemo(patch) {
     set((state) => ({
       ...state,
@@ -102,7 +139,7 @@ export const web3Demo = (set, get) => {
   }
 
   function updateWallet(wallet) {
-    writeJson(WALLET_STORAGE_KEY, wallet);
+    writeJson(WALLET_STORAGE_KEY, normalizeWallet(wallet));
     updateDemo({ wallet });
   }
 
@@ -112,7 +149,7 @@ export const web3Demo = (set, get) => {
         typeof updater === "function"
           ? updater(state.web3Demo.transactions)
           : updater;
-      writeJson(TX_STORAGE_KEY, transactions);
+      writeJson(TX_STORAGE_KEY, persistableTransactions(transactions));
 
       return {
         ...state,
@@ -373,13 +410,27 @@ export const web3Demo = (set, get) => {
     });
   }
 
+  function hasPendingSimulatorWork() {
+    const { lottery, transactions } = get().web3Demo;
+
+    return (
+      lottery.status === "entryPending" ||
+      lottery.status === "drawPending" ||
+      transactions.some((transaction) =>
+        PENDING_TRANSACTION_STATUSES.has(transaction.status)
+      )
+    );
+  }
+
+  const storedTransactions = initialTransactions();
+
   return {
     wallet: initialWallet(),
     activePrompt: null,
     pendingIntent: null,
     activeTransactionId: null,
-    transactions: initialTransactions(),
-    nextNonce: initialTransactions().length + 1,
+    transactions: storedTransactions,
+    nextNonce: storedTransactions.length + 1,
     notice: "",
     lottery: {
       week: 1,
@@ -399,12 +450,28 @@ export const web3Demo = (set, get) => {
     },
 
     connectWallet: async () => {
+      const sequence = ++connectSequence;
+      const prompt = get().web3Demo.activePrompt;
+      const promptIntentId = prompt?.intent?.id ?? null;
+
       updateWallet({
         ...get().web3Demo.wallet,
         status: "connecting",
       });
 
       await wait(700);
+      const activePrompt = get().web3Demo.activePrompt;
+      const activePromptIntentId = activePrompt?.intent?.id ?? null;
+
+      if (
+        sequence !== connectSequence ||
+        !activePrompt ||
+        activePrompt.type !== "connect" ||
+        activePromptIntentId !== promptIntentId
+      ) {
+        return;
+      }
+
       const wallet = makeWallet();
       updateWallet(wallet);
 
@@ -421,14 +488,8 @@ export const web3Demo = (set, get) => {
     },
 
     disconnectWallet: () => {
-      const wallet = {
-        status: "disconnected",
-        address: null,
-        balance: null,
-        chainId: 1337,
-        chainName: "QRNG Demo Chain",
-      };
-      updateWallet(wallet);
+      connectSequence += 1;
+      updateWallet(disconnectedWallet());
       updateDemo({
         activePrompt: null,
         pendingIntent: null,
@@ -437,6 +498,10 @@ export const web3Demo = (set, get) => {
     },
 
     closePrompt: () => {
+      connectSequence += 1;
+      if (get().web3Demo.wallet.status === "connecting") {
+        updateWallet(disconnectedWallet());
+      }
       updateDemo({
         activePrompt: null,
         pendingIntent: null,
@@ -472,6 +537,13 @@ export const web3Demo = (set, get) => {
       if (!get().hasLotteryEnded) {
         updateDemo({
           notice: "The lottery must end before drawing a winner",
+        });
+        return;
+      }
+
+      if (hasPendingSimulatorWork()) {
+        updateDemo({
+          notice: "Wait for the current contract receipt to finish first",
         });
         return;
       }
@@ -517,6 +589,7 @@ export const web3Demo = (set, get) => {
 
     rejectPrompt: () => {
       const prompt = get().web3Demo.activePrompt;
+      connectSequence += 1;
 
       if (prompt && prompt.type === "transaction") {
         const transaction = {
@@ -540,6 +613,9 @@ export const web3Demo = (set, get) => {
         return;
       }
 
+      if (get().web3Demo.wallet.status === "connecting") {
+        updateWallet(disconnectedWallet());
+      }
       updateDemo({
         activePrompt: null,
         pendingIntent: null,

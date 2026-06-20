@@ -7,6 +7,12 @@ showcase of the original QRNG flow.
 The current app keeps the wallet-style interaction and lottery state flow
 without depending on the original live contract infrastructure.
 
+## Demo
+
+The current demo is deployed on Vercel:
+
+https://qrng-lottery.vercel.app/
+
 ## Development
 
 ```sh
