@@ -1,4 +1,11 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "preview/**": true,
+      "**": false
+    }
+  },
   "buildCommand": "yarn build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
